@@ -1,0 +1,49 @@
+<?php
+// Projet: LunchBuddy
+// Fichier: personnesdb.php
+// Description: Fonctions de gestion de la table personnes 
+// Auteurs: Ludovic Gindre et Gregory Mendez
+
+
+require_once 'connexiondb.php';
+
+/**
+ * retourne les données de l'enregistrement idPersonne
+ * @param int $idPersonne ID de la personne dont on veut le détail
+ * @return array|NULL 
+ */
+function lireUnePersonneDepuisId($idPersonne)
+{
+    $bdd = connexionDb();
+    $sql = 'SELECT * FROM personnes WHERE idPersonne = :idPersonne';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('idPersonne'=>$idPersonne));
+    return $requete->fetch();
+}
+/**
+ * retourne les données de l'enregistrement Email
+ * @param type $email Email de la personne dont on veut les informations
+ * @return type
+ */
+function lireUnePersonneDepuisEmail($email)
+{
+    $bdd = connexionDb();
+    $sql = 'SELECT idPersonne, nom, prenom FROM personnes WHERE email = :email';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('email'=>$email));
+    return $requete->fetch();
+}
+/**
+ * retourne les données d'une personne dont les informations de connexion sont validées
+ * @param type $email Email de la personne se connectant
+ * @param type $password Mot de passe de la personne se connectant
+ * @return type
+ */
+function lirePersonneConnectee($email,$password)
+{
+    $bdd = connexionDb();
+    $sql = 'SELECT idPersonne, Nom, Prenom FROM personnes WHERE password = :password and email = :email';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('email'=>$email, 'password' => $password));
+    return $requete->fetch();
+}
