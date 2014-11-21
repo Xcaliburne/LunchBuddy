@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Ven 14 Novembre 2014 à 14:44
+-- Généré le :  Ven 21 Novembre 2014 à 15:11
 -- Version du serveur :  5.6.15-log
 -- Version de PHP :  5.5.8
 
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `lunchbuddy`
 --
-CREATE DATABASE `LunchBuddy`;
-USE `LunchBuddy`;
 
 -- --------------------------------------------------------
 
@@ -97,16 +95,18 @@ CREATE TABLE IF NOT EXISTS `statuts` (
 
 CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `idUtilisateur` int(11) NOT NULL AUTO_INCREMENT,
-  `pseudo` varchar(25) COLLATE latin1_general_ci NOT NULL,
-  `mdp` varchar(25) COLLATE latin1_general_ci NOT NULL,
+  `nom` varchar(25) COLLATE latin1_general_ci NOT NULL,
+  `prenom` varchar(25) COLLATE latin1_general_ci NOT NULL,
+  `email` varchar(25) COLLATE latin1_general_ci NOT NULL,
+  `password` varchar(25) COLLATE latin1_general_ci NOT NULL,
   `NPA` varchar(4) COLLATE latin1_general_ci NOT NULL,
   `nomRue` varchar(25) COLLATE latin1_general_ci NOT NULL,
   `numeroRue` varchar(10) COLLATE latin1_general_ci NOT NULL,
-  `rayon` decimal(65,0) NOT NULL,
+  `rayon` int(4) NOT NULL,
   `debutPause` time NOT NULL,
   `finPause` time NOT NULL,
   PRIMARY KEY (`idUtilisateur`),
-  UNIQUE KEY `pseudo` (`pseudo`)
+  UNIQUE KEY `pseudo` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
 --
@@ -117,8 +117,8 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
 -- Contraintes pour la table `avoir`
 --
 ALTER TABLE `avoir`
-  ADD CONSTRAINT `FK_avoir_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateurs` (`idUtilisateur`),
-  ADD CONSTRAINT `FK_avoir_idGroupe` FOREIGN KEY (`idGroupe`) REFERENCES `groupes` (`idGroupe`);
+  ADD CONSTRAINT `FK_avoir_idGroupe` FOREIGN KEY (`idGroupe`) REFERENCES `groupes` (`idGroupe`),
+  ADD CONSTRAINT `FK_avoir_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateurs` (`idUtilisateur`);
 
 --
 -- Contraintes pour la table `disponible`
