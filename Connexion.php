@@ -41,7 +41,7 @@ if (isset($_REQUEST['Connexion'])) {
                     <h1 class="text-center">Login</h1>
                 </header>
                 <section class="modal-body">
-                    <form class="form col-md-12" method="post" action="connexion.php">
+                    <form class="form col-md-12" method="post" action="index.php">
                         <section class="form-group">
                             <input name="Email" class="form-control input-lg" placeholder="Email" type="Email">
                         </section>
