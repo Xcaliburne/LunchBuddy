@@ -11,3 +11,25 @@ and open the template in the editor.
 .modal-footer{
     border-top: none;
 }
+
+#googleMap{
+    width: 800px;
+    height: 600px;
+}
+
+.conteneur{
+    margin-top: 100px;
+    //margin-left: 300px;
+}
+#carte{
+    margin-left: 100px;
+}
+.asideMenu{
+    background-color: #000;
+    border-radius: 10px;
+}
+.asideMenu a{
+    margin-top:2px;
+    margin-bottom: 2px;
+    color: #505f70;
+}
