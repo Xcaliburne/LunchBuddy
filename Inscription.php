@@ -1,11 +1,7 @@
 <?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+if ((!empty($_SESSION["email"])) && (!empty($_SESSION["password"])) && (!empty($_SESSION["confirmation"]))){
+    
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +26,7 @@ and open the template in the editor.
                 <section class="modal-dialog">
                     <section class="modal-content">
                         <header class="modal-header">
-                            <h1 class="text-center">Sign Up</h1>
+                            <h1 class="text-center">S'inscrire</h1>
                         </header>
                         <section class="modal-body">
                             <form class="form col-md-12">
@@ -44,14 +40,13 @@ and open the template in the editor.
                                 <input class="form-control input-lg" placeholder="Confirmation" type="password" name="confirmation">
                             </section>
                                 <section class="form-group">
-                                    <input class="btn btn-primary btn-lg btn-block" type="submit" name="inscrire" value="Sign Up">
-                                    <span class="pull-right"><a href="connexion.php">Se connecter</a></span><span><a href="#">Need help?</a></span>
+                                    <input class="btn btn-primary btn-lg btn-block" type="submit" name="inscrire" value="S'inscrire">                                    
                                 </section>
                             </form>
                         </section>
                         <footer class="modal-footer">
                             <section class="col-md-12">
-                                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                <span class="pull-left"><a href="connexion.php">Se connecter</a></span>
                             </section>
                         </footer>	
                     </section>

@@ -15,7 +15,7 @@ function connexionDb()
     $serveur = '127.0.0.1';
     $pseudo = 'root';
     $pwd = '';
-    $db = 'testlunchbuddy';
+    $db = 'lunchbuddy';
     
     static $bdd = null;
     

@@ -5,19 +5,19 @@
 // Auteurs: Ludovic Gindre et Gregory Mendez
 
 
-require_once 'connexiondb.php';
+require_once './Connexiondb.php';
 
 /**
  * retourne les données de l'enregistrement idPersonne
  * @param int $idPersonne ID de la personne dont on veut le détail
  * @return array|NULL 
  */
-function lireUnePersonneDepuisId($idPersonne)
+function lireUnePersonneDepuisId($idUtilisateur)
 {
     $bdd = connexionDb();
-    $sql = 'SELECT * FROM personnes WHERE idPersonne = :idPersonne';
+    $sql = 'SELECT * FROM Utilisateurs WHERE idUtilisateur = :idUtilisateur';
     $requete = $bdd->prepare($sql);
-    $requete->execute(array('idPersonne'=>$idPersonne));
+    $requete->execute(array('idUtilisateur'=>$idUtilisateur));
     return $requete->fetch();
 }
 /**
@@ -28,7 +28,7 @@ function lireUnePersonneDepuisId($idPersonne)
 function lireUnePersonneDepuisEmail($email)
 {
     $bdd = connexionDb();
-    $sql = 'SELECT idPersonne, nom, prenom FROM personnes WHERE email = :email';
+    $sql = 'SELECT idUtilisateur, nom, prenom FROM Utilisateurs WHERE email = :email';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('email'=>$email));
     return $requete->fetch();
@@ -42,7 +42,15 @@ function lireUnePersonneDepuisEmail($email)
 function lirePersonneConnectee($email,$password)
 {
     $bdd = connexionDb();
-    $sql = 'SELECT idPersonne, Nom, Prenom FROM personnes WHERE password = :password and email = :email';
+    $sql = 'SELECT idUtilisateur, nom, prenom FROM utilisateurs WHERE password = :password and email = :email';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('email'=>$email, 'password' => $password));
+    return $requete->fetch();
+}
+
+function inscrirePersonne($email,$password,$nom,$prenom){
+    $bdd = connexionDb();
+    $sql = 'insert into utilisateurs (email, password) values (:email, :password)';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('email'=>$email, 'password' => $password));
     return $requete->fetch();

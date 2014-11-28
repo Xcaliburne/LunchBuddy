@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION)){
+    session_start();
+}
 if (isset($_REQUEST['Connexion'])) {
     if ((!empty($_REQUEST['Email'])) && (!empty($_REQUEST['Password']))) {
         include_once 'personnesdb.php';
@@ -38,7 +41,7 @@ if (isset($_REQUEST['Connexion'])) {
         <section class="modal-dialog">
             <section class="modal-content">
                 <header class="modal-header">
-                    <h1 class="text-center">Login</h1>
+                    <h1 class="text-center">Se connecter</h1>
                 </header>
                 <section class="modal-body">
                     <form class="form col-md-12" method="post" action="index.php">
@@ -46,17 +49,16 @@ if (isset($_REQUEST['Connexion'])) {
                             <input name="Email" class="form-control input-lg" placeholder="Email" type="Email">
                         </section>
                         <section class="form-group">
-                            <input name="Password" class="form-control input-lg" placeholder="Password" type="password">
+                            <input name="Password" class="form-control input-lg" placeholder="Mot de passe" type="password">
                         </section>
                         <section class="form-group">
-                            <button name="Connexion" class="btn btn-primary btn-lg btn-block">Sign In</button>
-                            <span class="pull-left"><a href="#">Register</a></span>
+                            <button name="Connexion" class="btn btn-primary btn-lg btn-block">Se connecter</button>                            
                         </section>
                     </form>
                 </section>
                 <footer class="modal-footer">
                     <section class="col-md-12">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <span class="pull-left"><a href="Inscription.php">S'inscrire</a></span>
                     </section>
                 </footer>	
             </section>
