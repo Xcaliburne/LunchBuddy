@@ -1,6 +1,33 @@
 <?php
-if ((!empty($_SESSION["email"])) && (!empty($_SESSION["password"])) && (!empty($_SESSION["confirmation"]))){
-    
+if (!isset($_SESSION)) {
+    session_start();
+}
+include_once './personnesdb.php';
+$erreur = "";
+if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
+    if ((!empty($_POST["email"])) && (!empty($_POST["password"])) && (!empty($_POST["confirmation"]))) {
+        $email = $_POST["email"];
+        $password = sha1($_POST["password"]);
+        $confirmation = sha1($_POST["confirmation"]);
+        $erreur = "Erreur : l'Email est déjà utilisé sur LunchBuddy";
+        $uniqueEmail = estUniqueEmail($email);
+        if (!$uniqueEmail) {
+            $erreur = "Erreur : les mot de passe ne correspondent pas";
+            if ($password == $confirmation) {
+                $erreur = "";
+                try {
+                    $id = inscrirePersonne($email, $password);
+                    $_SESSION["id"] = $id;
+                    $_SESSION["email"] = $email;
+                    header('Location: index.php');
+                } catch (Exception $ex) {
+                    $erreur = $ex;
+                }
+            }
+        }
+    }
+} else {
+    header('Location: index.php');
 }
 ?>
 
@@ -21,7 +48,7 @@ and open the template in the editor.
         <link href="css/source.css" rel="stylesheet" type="text/css"/>  
     </head>
     <body>
-        <div>
+        <section>
             <section id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
                 <section class="modal-dialog">
                     <section class="modal-content">
@@ -29,16 +56,16 @@ and open the template in the editor.
                             <h1 class="text-center">S'inscrire</h1>
                         </header>
                         <section class="modal-body">
-                            <form class="form col-md-12">
-                            <section class="form-group">
-                                <input class="form-control input-lg" placeholder="Email" type="text" name="email">
-                            </section>
-                            <section class="form-group">
-                                <input class="form-control input-lg" placeholder="Mot de passe" type="password" name="password">
-                            </section>
-                            <section class="form-group">
-                                <input class="form-control input-lg" placeholder="Confirmation" type="password" name="confirmation">
-                            </section>
+                            <form class="form col-md-12" action="Inscription.php" method="post">
+                                <section class="form-group">
+                                    <input class="form-control input-lg" placeholder="Email" type="text" name="email">
+                                </section>
+                                <section class="form-group">
+                                    <input class="form-control input-lg" placeholder="Mot de passe" type="password" name="password">
+                                </section>
+                                <section class="form-group">
+                                    <input class="form-control input-lg" placeholder="Confirmation" type="password" name="confirmation">
+                                </section>
                                 <section class="form-group">
                                     <input class="btn btn-primary btn-lg btn-block" type="submit" name="inscrire" value="S'inscrire">                                    
                                 </section>
@@ -47,11 +74,12 @@ and open the template in the editor.
                         <footer class="modal-footer">
                             <section class="col-md-12">
                                 <span class="pull-left"><a href="connexion.php">Se connecter</a></span>
+                                <span class="alert-danger pull-right"><?php echo $erreur ?></span>
                             </section>
                         </footer>	
                     </section>
                 </section>
             </section>
-        </div>
+        </section>
     </body>
 </html>

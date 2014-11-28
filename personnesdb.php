@@ -42,16 +42,24 @@ function lireUnePersonneDepuisEmail($email)
 function lirePersonneConnectee($email,$password)
 {
     $bdd = connexionDb();
-    $sql = 'SELECT idUtilisateur, nom, prenom FROM utilisateurs WHERE password = :password and email = :email';
+    $sql = 'SELECT idUtilisateur FROM utilisateurs WHERE password = :password and email = :email';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('email'=>$email, 'password' => $password));
     return $requete->fetch();
 }
 
-function inscrirePersonne($email,$password,$nom,$prenom){
+function inscrirePersonne($email,$password){
     $bdd = connexionDb();
     $sql = 'insert into utilisateurs (email, password) values (:email, :password)';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('email'=>$email, 'password' => $password));
+    return $bdd->lastInsertId();
+}
+
+function estUniqueEmail($email){
+    $bdd = connexionDb();
+    $sql = 'select idUtilisateur from utilisateurs where email = :email';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('email'=>$email));
     return $requete->fetch();
 }
