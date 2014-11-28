@@ -28,8 +28,9 @@ if (isset($_REQUEST['Connexion'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.css" rel="stylesheet">
+    <link href="css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="css/bootstrap-theme.css" type="text/css" rel="stylesheet">
+    <link href="css/source.css" type="text/css" rel="stylesheet">
     <style>
         .modal-footer{
             border-top: 0px;
