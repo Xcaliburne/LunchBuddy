@@ -72,3 +72,13 @@ function lireAdresseDepuisEmail($email)
     $requete->execute(array('email'=>$email));
     return $requete->fetch(PDO::FETCH_ASSOC);
 }
+
+function lirePersonneDisponible($jour)
+{
+    $bdd = connexionDb();
+    $sql = 'SELECT nom, prenom, email, NPA, nomRue, numeroRue, lat, long FROM utilisateurs AS u'
+            .'NATURAL JOIN disponible AS d WHERE d.idJour = : jour';
+    $requete = $bdd->prepare($sql);
+    $requete-> execute(array('jour'=>$jour));
+    return $requete->fetch(PDO::FETCH_ASSOC);
+}
