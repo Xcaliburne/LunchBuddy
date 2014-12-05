@@ -63,3 +63,12 @@ function estUniqueEmail($email){
     $requete->execute(array('email'=>$email));
     return $requete->fetch();
 }
+
+function lireAdresseDepuisEmail($email)
+{
+    $bdd = connexionDb();
+    $sql = 'SELECT nomRue, numeroRue, NPA FROM utilisateurs WHERE email = :email';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('email'=>$email));
+    return $requete->fetch(PDO::FETCH_ASSOC);
+}
