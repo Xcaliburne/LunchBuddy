@@ -4,7 +4,6 @@
 // Description: Fonctions de gestion de la table personnes 
 // Auteurs: Ludovic Gindre et Gregory Mendez
 
-
 require_once './Connexiondb.php';
 
 /**
@@ -42,7 +41,7 @@ function lireUnePersonneDepuisEmail($email)
 function lirePersonneConnectee($email,$password)
 {
     $bdd = connexionDb();
-    $sql = 'SELECT idUtilisateur FROM utilisateurs WHERE password = :password and email = :email';
+    $sql = 'SELECT idUtilisateur, rayon FROM utilisateurs WHERE password = :password and email = :email';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('email'=>$email, 'password' => $password));
     return $requete->fetch();
@@ -76,9 +75,22 @@ function lireAdresseDepuisEmail($email)
 function lirePersonneDisponible($jour)
 {
     $bdd = connexionDb();
-    $sql = 'SELECT nom, prenom, email, NPA, nomRue, numeroRue, lat, long FROM utilisateurs AS u'
-            .'NATURAL JOIN disponible AS d WHERE d.idJour = : jour';
+    $sql = 'SELECT idUtilisateur, nom, prenom, email, NPA, nomRue, numeroRue, lat, lng FROM utilisateurs AS u '
+            .'NATURAL JOIN disponible AS d WHERE d.idJour = :jour';
     $requete = $bdd->prepare($sql);
     $requete-> execute(array('jour'=>$jour));
+    return $requete->fetchAll(PDO::FETCH_ASSOC);
+  
+}
+
+function lireCoordoneesPersonne($id)
+{
+    $bdd = connexionDb();
+    $sql = 'SELECT lat, long, rayon FROM utilisateurs WHERE idUtilisateur = :id';
+    $requete = $bdd->prepare($sql);
+    $requete-> execute(array('id'=>$id));
     return $requete->fetch(PDO::FETCH_ASSOC);
+    
+    
+    
 }

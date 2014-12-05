@@ -1,4 +1,6 @@
-<?php ?>
+<?php 
+    include 'personnesdb.php';
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,11 +12,12 @@
         <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
         <link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
         <link href="css/source.css" type="text/css" rel="stylesheet">
+         <script src="./js/JQuery.js" type="text/javascript"></script>
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA"></script>
         <script src="./js/googleMap.js" type="text/javascript"></script>
 
         <script>
-            window.onload = initialize;
+            window.onload = ajaxLoad;
             //google.maps.event.addDomListener(window, 'load', initialize);
         </script>
 <!-- <script src="js/JQuery.js"></script> -->
@@ -50,8 +53,8 @@
                         </ul>
                     </nav>
                 </aside>
-                
             </section>
+        <input type="hidden" id="rayonConnecte" value="<?php echo $_SESSION["rayon"]; ?>"/>
             
         
         <!--<section id="wrapper">
