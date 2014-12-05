@@ -16,7 +16,7 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
                 if (!$infosPersonnes) {
                     $erreur = 'Mot de passe ou Pseudo incorrecte';
                 } else {
-                    $_SESSION["idPersonne"] = $infosPersonnes["idPersonne"];
+                    $_SESSION["idUtilisateur"] = $infosPersonnes["idUtilisateur"];
                     $_SESSION["rayon"] = $infosPersonnes["rayon"];
                     $_SESSION["email"] = $email;
                             
@@ -41,11 +41,6 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
     <link href="css/bootstrap.css" type="text/css" rel="stylesheet">
     <link href="css/bootstrap-theme.css" type="text/css" rel="stylesheet">
     <link href="css/source.css" type="text/css" rel="stylesheet">
-    <style>
-        .modal-footer{
-            border-top: 0px;
-        }
-    </style>
 </head>
 <body>
     <section id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">

@@ -44,8 +44,7 @@
             <aside class="col-md-2 col-md-offset-1 asideMenu">
                 <nav>
                     <ul class="nav nav-pills nav-stacked span2">
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>
-                        <li><a href="Compte.php">Compte</a></li>
+                        <li><a href="Deconnexion.php">Déconnexion</a></li>                        
                         <li><a href="parametres.php">Compte</a></li>
                         <li><a href="Rendezvous.php">Rendez-vous</a></li>
                     </ul>
