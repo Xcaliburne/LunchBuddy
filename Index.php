@@ -5,6 +5,7 @@ if (!isset($_SESSION)){
 if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))){
     include_once 'Connexion.php';
 }  else {
+    
     include_once './Accueil.php';
 
 }

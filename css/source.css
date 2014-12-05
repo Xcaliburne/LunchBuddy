@@ -13,17 +13,14 @@ and open the template in the editor.
 }
 
 #googleMap{
-    width: 800px;
-    height: 600px;
+    height: 400px;
 }
 
 .conteneur{
-    margin-top: 100px;
+    padding: 0px;
     //margin-left: 300px;
 }
-#carte{
-    margin-left: 100px;
-}
+
 .asideMenu{
     background-color: #000;
     border-radius: 10px;
@@ -32,4 +29,13 @@ and open the template in the editor.
     margin-top:2px;
     margin-bottom: 2px;
     color: #505f70;
+}
+
+header .navbar{
+    margin-left: 10px;
+}
+
+footer{
+    color: red;
+    height: 50px;
 }

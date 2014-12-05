@@ -24,54 +24,52 @@
 <!-- <script src="js/bootstrap.min.js"></script> -->
     </head>
     <body>
-        <section class="container">
-        <!-- Fixed navbar -->
-            <header class="row navbar navbar-inverse navbar-fixed-top">
-                <section class="container-fluid">
-                    <header class="navbar-header">
-                        <a class="navbar-brand" href="Index.php">LunchBuddy</a>
-                    </header>
-                    <section class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-right">     
-                            <li><a href="">Compte</a></li>
-                            <li><a href="">Rendez-vous</a></li>
-                            <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                        </ul>
-                    </section>
+        <section class="col-md-12 conteneur">
+            <header class="navbar-inverse">
+                <header class="navbar-header">
+                    <a class="navbar-brand" href="Index.php">LunchBuddy</a>
+                </header>
+                <section class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">     
+                        <li><a href="">Compte</a></li>
+                        <li><a href="">Rendez-vous</a></li>
+                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    </ul>
                 </section>
             </header>
-            <section class="row conteneur">
-                <article class="col-md-5" id="carte">
-                    <div id="googleMap"></div>
-                </article>
-                <aside class="col-md-2 pull-right asideMenu">
-                    <nav>
-                        <ul class="nav nav-pills nav-stacked span2">
-                          <li><a href="Deconnexion.php">Déconnexion</a></li>
-                          <li><a href="Compte.php">Compte</a></li>
-                          <li><a href="Rendezvous.php">Rendez-vous</a></li>
-                        </ul>
-                    </nav>
-                </aside>
+            <!-- Fixed navbar -->
+            <section class="col-md-8 col-md-offset-1">                
+                <div class="" id="googleMap"></div>                                
+            </section>
+            <aside class="col-md-2 col-md-offset-1 asideMenu">
+                <nav>
+                    <ul class="nav nav-pills nav-stacked span2">
+                        <li><a href="Deconnexion.php">Déconnexion</a></li>
+                        <li><a href="Compte.php">Compte</a></li>
+                        <li><a href="parametres.php">Compte</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
             </section>
         <input type="hidden" id="rayonConnecte" value="<?php echo $_SESSION["rayon"]; ?>"/>
-            
-        
-        <!--<section id="wrapper">
-            <aside id="sidebar-wrapper">
-                <ul class="sidebar-nav">
-                    <li class="sidebar-brand"></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </aside>
-        </section>-->
-        
-        <footer></footer>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<!--<section id="wrapper">
+    <aside id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </aside>
+</section>-->
+
+            <footer></footer>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>
     </body>
-</html>
 </html>
