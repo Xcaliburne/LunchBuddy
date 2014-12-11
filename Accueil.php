@@ -45,28 +45,15 @@
                 <nav>
                     <ul class="nav nav-pills nav-stacked span2">
                         <li><a href="Deconnexion.php">Déconnexion</a></li>                        
-                        <li><a href="parametres.php">Compte</a></li>
+                        <li><a href="compte.php">Compte</a></li>
+                        <li><a href="parametres.php">Paramètres</a></li>
                         <li><a href="Rendezvous.php">Rendez-vous</a></li>
                     </ul>
                 </nav>
             </aside>
-
             </section>
         <input type="hidden" id="rayonConnecte" value="<?php echo $_SESSION["rayon"]; ?>"/>
-
-
-<!--<section id="wrapper">
-    <aside id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand"></li>
-            <li></li>
-            <li></li>
-        </ul>
-    </aside>
-</section>-->
-
             <footer></footer>
-
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>

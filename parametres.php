@@ -3,16 +3,33 @@ if (!isset($_SESSION)) {
     session_start();
 }
 include_once './personnesdb.php';
+include_once './OutilsFormulaires.php';
 $erreur = "";
 $regex = "#([01][0-9]|2[0-3]):[0-5][0-9]#";
+$idUtilisateur = $_SESSION["idUtilisateur"];
+$parametres = lireParametresUtilisateur($_SESSION["idUtilisateur"]);
+//$name = 'jours[]';
+//$liste = array('Lundi','Mardi','Mercredi','Jeudi','Vendredi');
+//$checked = lireDisponibilites($idUtilisateur);
+//foreach ($checked as &$element) {
+//    $element = $element[0];
+//}
+//$checkboxes = creerCheckboxes($name, $liste, $checked);
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $erreur = "veuillez entrer toutes les informations";
         if (!empty($_POST["adresse"])) {
             if (!empty($_POST["numeroRue"])) {
                 if (!empty($_POST["NPA"])) {
                     if ((!empty($_POST["rayon"])) && (is_numeric($_POST["rayon"]))) {
                         if (!empty($_POST["debutDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) {
                             if (!empty($_POST["finDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) {
+                                if (isset($_POST["jours"])) {
+                                    $jours = $_POST["jours"];
+                                } else {
+                                    $jours = "";
+                                }
+                                $erreur = "";
                                 $debutDispo = $_POST["debutDispo"] . ":00";
                                 $finDispo = $_POST["finDispo"] . ":00";
                                 $parsed = date_parse($debutDispo);
@@ -20,17 +37,35 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 $parsed = date_parse($finDispo);
                                 $secondsfin = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second'];
                                 if ($secondsDebut < $secondsfin) {
-                                    echo 'test';
                                     $adresse = $_POST["adresse"];
                                     $numeroRue = $_POST["numeroRue"];
                                     $NPA = $_POST["NPA"];
-                                    $rayon = $_POST["rayon"];
+                                    $rayon = $_POST["rayon"];                                    
+                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo)) {
+                                        if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
+                                            if (!empty($jours)) {
+                                                foreach ($jours as $jour) {
+                                                    if ((!is_numeric($jour)) or ( $jour < 1) or ( $jour > 5)) {
+                                                        unset($jour);
+                                                    }
+                                                    if (ajouterDisponibilite($idUtilisateur, $jour) == FALSE) {
+                                                        $erreur = "ajout des disponibilités impossible";
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        $erreur = "modification interrompue";
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+        if ($erreur == "") {
+            header('Location: index.php');
         }
     }
 } else {
@@ -77,61 +112,64 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 <section class="form-group">
                                     <label for="adresse" class="col-md-8 control-label">Adresse*</label>
                                     <section class="col-sm-4">
-                                        <input type="text" required class="form-control" name="adresse" id="adresse">
+                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["nomRue"] ?>" name="adresse" id="adresse">
                                     </section>
                                 </section>
                                 <section class="form-group">
                                     <label for="numeroRue" class="col-md-8 control-label">N° de rue*</label>
                                     <section class="col-sm-4">
-                                        <input type="text" required class="form-control" name="numeroRue" id="numeroRue">
+                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["numeroRue"] ?>" name="numeroRue" id="numeroRue">
                                     </section>
                                 </section>
                                 <section class="form-group">
                                     <label for="NPA" class="col-md-8 control-label">NPA*</label>
                                     <section class="col-sm-4">
-                                        <input type="text" required class="form-control" name="NPA" id="NPA">
+                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["NPA"] ?>" name="NPA" id="NPA">
                                     </section>
                                 </section>
                             </section>
                             <section class="col-md-6">
                                 <section class="form-group">
-                                    <label for="rayon" class="col-md-8 control-label">Rayon de disponibilité(en mètres)*</label>
+                                    <label for="rayon" class="col-md-8 control-label">Rayon de disponibilité(en kilomètres)*</label>
                                     <section class="col-sm-4">
-                                        <input type="number" required class="form-control" name="rayon" id="rayon">
+                                        <input type="number" required class="form-control" value="<?php echo $parametres[0]["rayon"] ?>" name="rayon" id="rayon">
                                     </section>
                                 </section>
                                 <section class="form-group">
                                     <label for="debutDispo" class="col-md-8 control-label">Début de la disponibilité*</label>
                                     <section class="col-sm-4">
-                                        <input type="text" required class="form-control" name="debutDispo" id="debutDispo">
+                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["debutPause"] ?>" name="debutDispo" id="debutDispo">
                                     </section>
                                 </section>                                
                                 <section class="form-group">
                                     <label for="finDispo" class="col-md-8 control-label">Fin de la disponibilité*</label>
                                     <section class="col-sm-4">
-                                        <input type="text" required class="form-control" name="finDispo" id="finDispo">
+                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["finPause"] ?>" name="finDispo" id="finDispo">
                                     </section>
                                 </section>
                             </section>
                             <fieldset class="col-md-12">
+                                
                                 <legend>jours de disponibilité:</legend>
+                                <?php //echo $checkboxes; ?>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="lundi" value="lundi">Lundi 
+                                    <input type="checkbox" name="jours[]" value="1">Lundi 
                                 </label>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="mardi" value="mardi"> Mardi
+                                    <input type="checkbox" name="jours[]" id="mardi" value="2"> Mardi
                                 </label>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="mercredi" value="mercredi"> Mercredi
+                                    <input type="checkbox" name="jours[]" id="mercredi" value="3"> Mercredi
                                 </label>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="jeudi" value="jeudi"> Jeudi
+                                    <input type="checkbox" name="jours[]" id="jeudi" value="4"> Jeudi
                                 </label>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="vendredi" value="vendredi"> Vendredi
+                                    <input type="checkbox" name="jours[]" id="vendredi" value="5"> Vendredi
                                 </label>
                             </fieldset>
                             <section class="col-md-12">
+                                <span class="pull-left alert-info"><?php echo $erreur ?></span>
                                 <button class="btn btn-default pull-right">Envoyer</button>
                             </section>
                         </form>
@@ -147,21 +185,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                     </ul>
                 </nav>
             </aside>
-
-
-
-<!--<section id="wrapper">
-    <aside id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand"></li>
-            <li></li>
-            <li></li>
-        </ul>
-    </aside>
-</section>-->
-
             <footer></footer>
-
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>
