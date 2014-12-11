@@ -5,10 +5,12 @@
  */
 <<<<<<< HEAD
 var map;
+var latUser;
+var lngUser;
 navigator.geolocation.getCurrentPosition(function(position) {
-  var latUser = position.coords.latitude;
-  var lngUser =position.coords.longitude;
-});
+   latUser = position.coords.latitude;
+   lngUser =position.coords.longitude;
+}, null, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
 function initialize(listePersonnes)
 {
     var mapProp = {
@@ -37,21 +39,23 @@ function ajaxLoad()
    });
  }
  
- function distance(lat_a, lon_a, lat_b, lon_b)  
- { 
-     a = Math.PI / 180; 
-     lat1 = lat_a * a; 
-     lat2 = lat_b * a; 
-     lon1 = lon_a * a; 
-     lon2 = lon_b * a;  
-     t1 = Math.sin(lat1) * Math.sin(lat2); 
-     t2 = Math.cos(lat1) * Math.cos(lat2); 
-     t3 = Math.cos(lon1 - lon2); 
-     t4 = t2 * t3; 
-     t5 = t1 + t4; 
-     rad_dist = Math.atan(-t5/Math.sqrt(-t5 * t5 +1)) + 2 * Math.atan(1);  
-     return (rad_dist * 3437.74677 * 1.1508) * 1.6093470878864446;
- }
+
+ 
+ function calcDistance(LatB, LngB){
+   rad = function(x) {return x*Math.PI/180;}
+
+
+  var R     = 6371;                          //Rayon de la Terre en km
+  var dLat  = rad( LatB - latUser );
+  var dLong = rad( LngB - lngUser );
+
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(latUser)) * Math.cos(rad(LatB)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c;
+
+  return d.toFixed(3);                      //Retour 3 décimales
+}
+
    
 
 function extraitMarqueur(map, listePersonne)
@@ -59,7 +63,7 @@ function extraitMarqueur(map, listePersonne)
     var i = 0;
     for(i=0;i<listePersonne.length;i++)
     {
-        var distance = distance(latUser, lngUser, listePersonne[i].lat, listePersonne[i].lng)*1000;
+        var distance = calcDistance(listePersonne[i].lat, listePersonne[i].lng);
         if(document.getElementById("rayonConnecte").value >= distance)
         {
             ajoutMarqueur(map,listePersonne[i].lat,listePersonne[i].lng);
