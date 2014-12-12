@@ -66,7 +66,7 @@ function extraitMarqueur(map, listePersonne)
         var distance = calcDistance(listePersonne[i].lat, listePersonne[i].lng);
         if(document.getElementById("rayonConnecte").value >= distance)
         {
-            ajoutMarqueur(map,listePersonne[i].lat,listePersonne[i].lng);
+            ajoutMarqueur(map,listePersonne[i].lat,listePersonne[i].lng, listePersonne[i],distance);
         }
         
     }
@@ -96,21 +96,27 @@ function successCallback(position){
 >>>>>>> Geolocalisation sur google map
 }
 
- function ajoutMarqueur(map, lat,lng)
- {
+function ajoutMarqueur(map, lat, lng, personne, rayon)
+{
+      var contentString = personne.nom + ' ' + personne.prenom;
+      var infowindow = new google.maps.InfoWindow({
+          content: contentString
+      });
+
+        
      var coord = new google.maps.LatLng(lat, lng);
-     var marker = new google.maps.Marker({map: map, position: coord });
- }
-/*function GetLocation() {
-    var geocoder = new google.maps.Geocoder();
-    var address = document.getElementById("txtAddress").value;
-    geocoder.geocode({ 'address': address }, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
-            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
-        } else {
-            alert("Request failed.")
-        }
+     var optionsMarker = {
+         map: map,
+         position: coord,
+         title: personne.nom + ' ' + personne.prenom
+     };
+     
+    var marker = new google.maps.Marker(optionsMarker);
+   
+            
+
+    google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map,marker);
     });
-};*/
+ }
+
