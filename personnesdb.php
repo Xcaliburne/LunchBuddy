@@ -121,4 +121,4 @@ function lireCoordoneesPersonne($id)
     return $requete->fetch(PDO::FETCH_ASSOC);    
     
 }
-}
+

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-<<<<<<< HEAD
 var map;
 var latUser;
 var lngUser;
@@ -70,30 +69,14 @@ function extraitMarqueur(map, listePersonne)
         }
         
     }
-    
-=======
-function initialize() {
-  map = new google.maps.Map(document.getElementById("googleMap"), {
-        zoom: 10,
-        center: new google.maps.LatLng(46.198467, 6.141160),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });   
 } 
- 
-if (navigator.geolocation)
-  var watchId = navigator.geolocation.watchPosition(successCallback,
-                            null,
-                            {enableHighAccuracy:true});
-else
-  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");    
- 
+
 function successCallback(position){
   map.panTo(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
     map: map
   }); 
->>>>>>> Geolocalisation sur google map
 }
 
 function ajoutMarqueur(map, lat, lng, personne, rayon)
