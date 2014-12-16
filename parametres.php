@@ -2,28 +2,28 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-include_once './personnesdb.php';
-include_once './OutilsFormulaires.php';
-$erreur = "";
-$regex = "#([01][0-9]|2[0-3]):[0-5][0-9]#";
-$idUtilisateur = $_SESSION["idUtilisateur"];
-$parametres = lireParametresUtilisateur($_SESSION["idUtilisateur"]);
-//$name = 'jours[]';
-//$liste = array('Lundi','Mardi','Mercredi','Jeudi','Vendredi');
-//$checked = lireDisponibilites($idUtilisateur);
-//foreach ($checked as &$element) {
-//    $element = $element[0];
-//}
-//$checkboxes = creerCheckboxes($name, $liste, $checked);
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $erreur = "veuillez entrer toutes les informations";
-        if (!empty($_POST["adresse"])) {
+    include_once './personnesdb.php';
+    include_once './outilsFormulaires.php';
+    $erreur = "";
+    $regex = "#([01][0-9]|2[0-3]):[0-5][0-9]#"; //expression régulière d'une heure
+    $idUtilisateur = $_SESSION["idUtilisateur"];
+    $parametres = lireParametresUtilisateur($idUtilisateur); //récuperation des paramètres d'un utilisateur
+    $name = 'jours';
+    $liste = array(1 => 'Lundi', 2 => 'Mardi', 3 => 'Mercredi', 4 => 'Jeudi', 5 => 'Vendredi');
+    $checked = lireDisponibilites($idUtilisateur);
+    foreach ($checked as &$element) {  //mise en forme du tableau
+        $element = $element[0];
+    }
+    $checkboxes = creerCheckboxes($name, $liste, $checked); //création des checkboxes
+    if ($_SERVER["REQUEST_METHOD"] == "POST") { //si la requete est en post
+        $erreur = "veuillez entrer toutes les informations";  //initialisation de l'erreur
+        if (!empty($_POST["adresse"])) { //contrôle de la saisie des champs
             if (!empty($_POST["numeroRue"])) {
                 if (!empty($_POST["NPA"])) {
-                    if ((!empty($_POST["rayon"])) && (is_numeric($_POST["rayon"]))) {
-                        if (!empty($_POST["debutDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) {
-                            if (!empty($_POST["finDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) {
+                    if ((!empty($_POST["rayon"])) && (is_numeric($_POST["rayon"]))) { //si le rayon est renseigné et numerique
+                        if (!empty($_POST["debutDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) { //si l'heure correspond au format requis
+                            if (!empty($_POST["finDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) { //si l'heure correspond au format requis
                                 if (isset($_POST["jours"])) {
                                     $jours = $_POST["jours"];
                                 } else {
@@ -33,23 +33,25 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 $debutDispo = $_POST["debutDispo"] . ":00";
                                 $finDispo = $_POST["finDispo"] . ":00";
                                 $parsed = date_parse($debutDispo);
-                                $secondsDebut = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second'];
+                                $secondsDebut = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second']; //transformation de l'heure en secondes
                                 $parsed = date_parse($finDispo);
-                                $secondsfin = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second'];
-                                if ($secondsDebut < $secondsfin) {
+                                $secondsfin = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second']; //transformation de l'heure en secondes
+                                if ($secondsDebut < $secondsfin) {//
+                                    unset($parsed);
+                                    unset($secondsDebut);
+                                    unset($secondsfin);
                                     $adresse = $_POST["adresse"];
                                     $numeroRue = $_POST["numeroRue"];
                                     $NPA = $_POST["NPA"];
-                                    $rayon = $_POST["rayon"];                                    
+                                    $rayon = $_POST["rayon"];
                                     if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo)) {
                                         if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
                                             if (!empty($jours)) {
-                                                foreach ($jours as $jour) {
-                                                    if ((!is_numeric($jour)) or ( $jour < 1) or ( $jour > 5)) {
-                                                        unset($jour);
-                                                    }
-                                                    if (ajouterDisponibilite($idUtilisateur, $jour) == FALSE) {
-                                                        $erreur = "ajout des disponibilités impossible";
+                                                foreach ($jours as $jour) {//pour chaque jour
+                                                    if ((is_numeric($jour)) or ( $jour > 1) or ( $jour < 5)) { //si le jour correspond
+                                                        if (ajouterDisponibilite($idUtilisateur, $jour) == FALSE) {//ajout du jour dans la db
+                                                            $erreur = "ajout des disponibilités impossible";
+                                                        }
                                                     }
                                                 }
                                             }
@@ -65,11 +67,11 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             }
         }
         if ($erreur == "") {
-            header('Location: index.php');
+            header('Location: index.php');//retour à l'accueil
         }
     }
 } else {
-    header('Location: index.php');
+    header('Location: index.php');//retour à l'accueil
 }
 ?>
 
@@ -149,24 +151,13 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 </section>
                             </section>
                             <fieldset class="col-md-12">
-                                
+
                                 <legend>jours de disponibilité:</legend>
-                                <?php //echo $checkboxes; ?>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="jours[]" value="1">Lundi 
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="jours[]" id="mardi" value="2"> Mardi
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="jours[]" id="mercredi" value="3"> Mercredi
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="jours[]" id="jeudi" value="4"> Jeudi
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="jours[]" id="vendredi" value="5"> Vendredi
-                                </label>
+                                <?php
+                                foreach ($checkboxes as $checkboxe) {
+                                    echo $checkboxe;
+                                }
+                                ?>                                
                             </fieldset>
                             <section class="col-md-12">
                                 <span class="pull-left alert-info"><?php echo $erreur ?></span>
