@@ -1,10 +1,40 @@
 <?php
+if (!isset($_SESSION)) {
+    session_start();
+}
 include_once 'personnesdb.php';
+include_once 'groupesdb.php';
+if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
+    if (!empty($_GET["idRdv"])) {
+        $idRdv = $_GET["idRdv"];
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (isset($_POST["non"])) {
+                header('Location: RendezVous.php');
+            }
+            if (isset($_POST["oui"])) {
+                $rdv = lirerendezvous($idRdv);
+                if (supprimerpersonnesGroupe($rdv["idGroupe"])) {
+                    if (supprimerGroupe($rdv["idGroupe"])) {
+                        if (supprimerRendezVous($idRdv)) {
+                            header('Location: RendezVous.php');
+                        }
+                    }
+                }
+            } else {
+                header('Location: RendezVous.php');
+            }
+        }
+    } else {
+        header('Location: index.php'); //retour à l'accueil
+    }
+} else {
+    header('Location: index.php'); //retour à l'accueil
+}
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>LunchBuddy - Accueil</title>
+        <title>LunchBuddy - Suppression</title>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,8 +69,22 @@ include_once 'personnesdb.php';
             </header>
             <!-- Fixed navbar -->
             <section class="col-md-8 col-md-offset-1">                
-                <div class="" id="googleMap"></div>                                
-            </section>
+                <article>
+                    <div class="row">
+                        <h1 class="text-center">Suppression</h1>             
+                        <form class="form-horizontal" method="post" action="supprimerRdv.php?idRdv=<?php echo $idRdv ?>">
+                            <section class="col-md-12">
+                                <section class="form-group">
+                                    <label for="adresse" class="col-md-6 control-label">Êtes vous sûr de vouloir supprimer le rendez-vous ?</label>
+                                    <section class="col-sm-4">
+                                        <button name="non" class="btn btn-default pull-right">Non</button><button name="oui" class="btn btn-default pull-right">Oui</button>
+                                    </section>
+                                </section>
+                            </section>
+                        </form>
+                    </div>
+                </article>              
+            </section> 
             <aside class="col-md-2 col-md-offset-1 asideMenu">
                 <nav>
                     <ul class="nav nav-pills nav-stacked span2">

@@ -1,5 +1,15 @@
 <?php
+if (!isset($_SESSION)) {
+    session_start();
+}
 include_once 'personnesdb.php';
+include_once 'groupesdb.php';
+if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
+    $idUtilisateur = $_SESSION["idUtilisateur"];
+    $rdvs = lireRendezVousUtilisateur($idUtilisateur);
+} else {
+    header('Location: index.php'); //retour à l'accueil
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,7 +49,41 @@ include_once 'personnesdb.php';
             </header>
             <!-- Fixed navbar -->
             <section class="col-md-8 col-md-offset-1">                
-                <div class="" id="googleMap"></div>                                
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>date</th>
+                            <th>Informations</th>
+                            <th>statut</th>
+                            <th>Modifier</th>
+                            <th>Supprimer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($rdvs as $rdv) {
+                            echo ''
+                            . '<tr>'
+                            . '<td>'
+                            . $rdv["dateRdv"]
+                            . '</td>'
+                            . '<td>'
+                            . $rdv["commentaire"]
+                            . '</td>'
+                            . '<td>'
+                            . $rdv["nomStatut"]
+                            . '</td>'
+                            . '<td>'
+                            . '<a href="editerRdv.php?idRdv=' . $rdv["idRdv"] . '"><span class="glyphicon glyphicon-cog"></span></a>'
+                            . '</td>'
+                            . '<td>'
+                            . '<a href="supprimerRdv.php?idRdv=' . $rdv["idRdv"] . '"><span class="glyphicon glyphicon-remove"></span></a>'
+                            . '</td>'
+                            . '</tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </section>
             <aside class="col-md-2 col-md-offset-1 asideMenu">
                 <nav>
