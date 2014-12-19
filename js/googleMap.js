@@ -85,8 +85,7 @@ function ajoutMarqueur(map, lat, lng, personne, rayon)
                             <div>\n\
                                 <div>" + personne.nom + ' ' + personne.prenom + "</div>\n\
                                 <div>\n\
-                                    <div><label for=\"date\">Date :</label><input id=\"date\" type=\"date\" name=\"date\"/></div>\n\
-                                    <div><label for=\"comm\">Commentaire :</label><textarea id=\"comm\" row=\"4\" name=\"comm\"></textarea></div>\n\
+                                    <div><span>Disponibilité : "+ personne.debutPause + " à " + personne.finPause +"</span></div>\n\
                                     <div><form action=\" CreerRendezVous.php?idUtilisateur=" + personne.idUtilisateur + " \"><input type=\"submit\" name=\"ajouter\" value=\"demande de rendez-vous\"/></form></div>\n\
                                 </div>\n\
                             </div>";
