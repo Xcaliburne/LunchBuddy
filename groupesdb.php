@@ -60,32 +60,42 @@ function ajoutRendezvous($idGroupe, $date, $commentaire) {
     return $bdd->lastInsertId();
 }
 
-function supprimerRendezVous($idRdv){
+function supprimerRendezVous($idRdv) {
     $bdd = connexionDb();
     $sql = 'DELETE FROM rendezvous WHERE idRdv = :idRdv';
     $requete = $bdd->prepare($sql);
-    if($requete->execute(array('idRdv' => $idRdv))){
+    if ($requete->execute(array('idRdv' => $idRdv))) {
         return TRUE;
     }
     return FALSE;
 }
 
-function supprimerGroupe($idGroupe){
+function supprimerGroupe($idGroupe) {
     $bdd = connexionDb();
     $sql = 'DELETE FROM groupes WHERE idGroupe = :idGroupe';
     $requete = $bdd->prepare($sql);
-    if($requete->execute(array('idGroupe' => $idGroupe))){
+    if ($requete->execute(array('idGroupe' => $idGroupe))) {
         return TRUE;
     }
     return FALSE;
 }
 
-function supprimerpersonnesGroupe($idGroupe){
+function supprimerpersonnesGroupe($idGroupe) {
     $bdd = connexionDb();
     $sql = 'DELETE FROM composer WHERE idGroupe = :idGroupe';
     $requete = $bdd->prepare($sql);
-    if($requete->execute(array('idGroupe' => $idGroupe))){
+    if ($requete->execute(array('idGroupe' => $idGroupe))) {
         return TRUE;
     }
     return FALSE;
+}
+
+function lirePersonnesRdv($idGroupe) {
+    $bdd = connexionDb();
+    $sql = 'select u.idUtilisateur, u.nom, u.prenom, u.email from composer as c 
+join utilisateurs as u on c.idUtilisateur = u.idUtilisateur
+where c.idGroupe = :idGroupe';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('idGroupe' => $idGroupe));
+    return $requete->fetchAll();
 }

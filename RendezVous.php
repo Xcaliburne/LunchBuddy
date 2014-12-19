@@ -7,6 +7,18 @@ include_once 'groupesdb.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
     $rdvs = lireRendezVousUtilisateur($idUtilisateur);
+    foreach ($rdvs as &$rdv) {
+        $idGroupe = $rdv["idRdv"];
+        $personnes = lirePersonnesRdv($idGroupe);
+        $i = 0;
+        foreach ($personnes as &$personne) {            
+            if ($personne["idUtilisateur"] == $idUtilisateur) {
+                unset($personnes[$i]);
+            }
+            $i++;
+        }
+        $rdv["personnes"] = $personnes;
+    }    
 } else {
     header('Location: index.php'); //retour à l'accueil
 }
@@ -25,11 +37,6 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
         <script src="./js/JQuery.js" type="text/javascript"></script>
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA"></script>
         <script src="./js/googleMap.js" type="text/javascript"></script>
-
-        <script>
-            window.onload = ajaxLoad;
-            //google.maps.event.addDomListener(window, 'load', initialize);
-        </script>
 <!-- <script src="js/JQuery.js"></script> -->
 <!-- <script src="js/bootstrap.min.js"></script> -->
     </head>
@@ -54,6 +61,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                         <tr>
                             <th>date</th>
                             <th>Informations</th>
+                            <th>Utilisateur</th>
                             <th>statut</th>
                             <th>Modifier</th>
                             <th>Supprimer</th>
@@ -69,6 +77,12 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                             . '</td>'
                             . '<td>'
                             . $rdv["commentaire"]
+                            . '</td>'
+                            . '<td>';
+                            foreach ($rdv["personnes"] as $personne) {
+                                echo $personne["prenom"] . " " .$personne["nom"];
+                            };
+                            echo ''
                             . '</td>'
                             . '<td>'
                             . $rdv["nomStatut"]

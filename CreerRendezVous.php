@@ -68,7 +68,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                         <form class="form-horizontal" method="post" action="creerRendezVous.php?idUtilisateur=<?php echo $idUtilisateurInvite ?>">
                             <section class="col-md-6 col-md-offset-3">
                                 <section class="form-group">
-                                    <label for="commentaire" class="col-md-8 control-label">Entrez les informations du rendez-vous</label>
+                                    <label for="commentaire" class="col-md-9 control-label">Entrez les informations du rendez-vous</label>
                                     <section class="col-md-12">
                                         <textarea name="commentaire" rows="5"></textarea>
                                     </section>
