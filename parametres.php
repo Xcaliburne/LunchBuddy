@@ -23,7 +23,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 if (!empty($_POST["NPA"])) {
                     if ((!empty($_POST["rayon"])) && (is_numeric($_POST["rayon"]))) { //si le rayon est renseigné et numerique
                         if (!empty($_POST["debutDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) { //si l'heure correspond au format requis
-                            if (!empty($_POST["finDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) { //si l'heure correspond au format requis
+                            if (!empty($_POST["finDispo"]) && (preg_match($regex, $_POST["finDispo"]))) { //si l'heure correspond au format requis
                                 if (isset($_POST["jours"])) {
                                     $jours = $_POST["jours"];
                                 } else {
