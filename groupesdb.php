@@ -16,6 +16,15 @@ function ajoutGroupe($nomGroupe) {
     return $bdd->lastInsertId();
 }
 
+function lireGroupeParidRdv($id)
+{
+    $bdd = connexionDb();
+    $sql = 'SELECT idGroupe FROM rendezvous WHERE idRdv = :id';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id));
+    return $requete->fetchAll();
+}
+
 function lireRendezVousUtilisateur($idUtilisateur) {
     $bdd = connexionDb();
     $sql = 'SELECT * FROM rendezvous as r
@@ -27,6 +36,7 @@ where c.idUtilisateur = :idUtilisateur';
     $requete->execute(array('idUtilisateur' => $idUtilisateur));
     return $requete->fetchAll();
 }
+
 
 function lireStatutParIdGroupe($id) {
     $bdd = connexionDb();
@@ -52,6 +62,14 @@ function ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe) {
     return $bdd->lastInsertId();
 }
 
+function modifierComposer($idGroupe, $statut) {
+    $bdd = connexionDb();
+    $sql = 'UPDATE composer SET idStatut=:statut WHERE idGroupe=:idGroupe';
+    $requete = $bdd->prepare($sql);
+    $result = $requete->execute(array('statut' => $statut, 'idGroupe' => $idGroupe));
+    return $result;
+}
+
 function ajoutRendezvous($idGroupe, $date, $commentaire) {
     $bdd = connexionDb();
     $sql = 'insert into rendezvous (dateRdv, commentaire, idGroupe) values (:date, :commentaire, :idGroupe)';
@@ -65,6 +83,17 @@ function supprimerRendezVous($idRdv) {
     $sql = 'DELETE FROM rendezvous WHERE idRdv = :idRdv';
     $requete = $bdd->prepare($sql);
     if ($requete->execute(array('idRdv' => $idRdv))) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+function supprimerComposer($idUtilisateur, $idGroupe)
+{
+    $bdd = connexionDb();
+    $sql = 'DELETE FROM composer WHERE idUtilisateur= :idUtilisateur AND idGroupe = :idGroupe';
+    $requete = $bdd->prepare($sql);
+    if($requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe))){
         return TRUE;
     }
     return FALSE;

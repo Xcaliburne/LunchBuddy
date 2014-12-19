@@ -81,14 +81,15 @@ function successCallback(position){
 
 function ajoutMarqueur(map, lat, lng, personne, rayon)
 {
-      var contentString = "<form action=\"ajoutRdv.php\" method=\"post\">\n\
+      var contentString = "<form action=\"CreerRendezVous.php?idUtilisateur=" + personne.idUtilisateur + "\" method=\"post\">\n\
                             <div>\n\
                                 <div>" + personne.nom + ' ' + personne.prenom + "</div>\n\
                                 <div>\n\
                                     <div><span>Disponibilité : "+ personne.debutPause + " à " + personne.finPause +"</span></div>\n\
-                                    <div><form action=\" CreerRendezVous.php?idUtilisateur=" + personne.idUtilisateur + " \"><input type=\"submit\" name=\"ajouter\" value=\"demande de rendez-vous\"/></form></div>\n\
+                                    <div><input type=\"submit\" name=\"ajouter\" value=\"demande de rendez-vous\"/></div>\n\
                                 </div>\n\
-                            </div>";
+                            </div>\n\
+                            </form>";
       
       var infowindow = new google.maps.InfoWindow({
             content: contentString

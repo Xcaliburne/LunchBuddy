@@ -8,6 +8,8 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
     if ((!empty($_POST["email"])) && (!empty($_POST["password"])) && (!empty($_POST["confirmation"]))) {
         $email = $_POST["email"];
         $password = sha1($_POST["password"]);
+        $nom = $_POST["nom"];
+        $prenom = $_POST["prenom"];
         $confirmation = sha1($_POST["confirmation"]);
         $erreur = "Erreur : l'Email est déjà utilisé sur LunchBuddy";
         $uniqueEmail = estUniqueEmail($email);
@@ -16,7 +18,7 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
             if ($password == $confirmation) {
                 $erreur = "";
                 try {
-                    $id = inscrirePersonne($email, $password);
+                    $id = inscrirePersonne($email, $password, $nom, $prenom);
                     $_SESSION["id"] = $id;
                     $_SESSION["email"] = $email;
                     header('Location: index.php');
@@ -59,6 +61,13 @@ and open the template in the editor.
                             <form class="form col-md-12" action="Inscription.php" method="post">
                                 <section class="form-group">
                                     <input class="form-control input-lg" placeholder="Email" type="text" name="email">
+                                </section>
+                                <section class="form-group">
+                                    <input class="form-control input-lg" placeholder="Nom" type="text" name="nom">
+                                </section>
+                                <section class="form-group">
+                                    <input class="form-control input-lg" placeholder="Prenom" type="text" name="prenom
+                                           ">
                                 </section>
                                 <section class="form-group">
                                     <input class="form-control input-lg" placeholder="Mot de passe" type="password" name="password">

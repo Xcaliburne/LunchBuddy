@@ -47,11 +47,11 @@ function lirePersonneConnectee($email, $password) {
     return $requete->fetch();
 }
 
-function inscrirePersonne($email, $password) {
+function inscrirePersonne($email, $password, $nom, $prenom) {
     $bdd = connexionDb();
-    $sql = 'insert into utilisateurs (email, password) values (:email, :password)';
+    $sql = 'insert into utilisateurs (email, password, nom, prenom) values (:email, :password, :nom, :prenom)';
     $requete = $bdd->prepare($sql);
-    $requete->execute(array('email' => $email, 'password' => $password));
+    $requete->execute(array('email' => $email, 'password' => $password, 'nom' => $nom, 'prenom' => $prenom));
     return $bdd->lastInsertId();
 }
 
