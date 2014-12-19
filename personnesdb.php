@@ -125,7 +125,7 @@ function lireCoordoneesPersonne($id)
 function lirePersonneDisponible($jour)
 {
     $bdd = connexionDb();
-    $sql = 'SELECT idUtilisateur, nom, prenom, email, NPA, nomRue, numeroRue, lat, lng FROM utilisateurs AS u '
+    $sql = 'SELECT idUtilisateur, nom, prenom, email, NPA, nomRue, numeroRue, lat, lng, debutPause, finPause FROM utilisateurs AS u '
             .'NATURAL JOIN disponible AS d WHERE d.idJour = :jour';
     $requete = $bdd->prepare($sql);
     $requete-> execute(array('jour'=>$jour));
