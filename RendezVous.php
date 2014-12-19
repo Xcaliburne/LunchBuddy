@@ -8,17 +8,20 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
     $rdvs = lireRendezVousUtilisateur($idUtilisateur);
     foreach ($rdvs as &$rdv) {
-        $idGroupe = $rdv["idRdv"];
-        $personnes = lirePersonnesRdv($idGroupe);
+        $idGroupe = $rdv["idGroupe"];
+        $personnes = lirePersonnesRdv($idGroupe);        
         $i = 0;
-        foreach ($personnes as &$personne) {            
+        foreach ($personnes as &$personne) {
             if ($personne["idUtilisateur"] == $idUtilisateur) {
                 unset($personnes[$i]);
+            } else {
+                $personne["statutPersonne"] = lireStatutParGroupeetUtilisateur($idGroupe, $personne["idUtilisateur"]);
+                $personne["statutPersonne"] = $personne["statutPersonne"]["nomStatut"];
             }
             $i++;
         }
         $rdv["personnes"] = $personnes;
-    }    
+    }
 } else {
     header('Location: index.php'); //retour à l'accueil
 }
@@ -48,21 +51,23 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 </section>
                 <section class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="">Compte</a></li>
-                        <li><a href="">Rendez-vous</a></li>
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        <li><a href="parametres.php">Paramètres</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
+                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
                     </ul>
                 </section>
             </header>
             <!-- Fixed navbar -->
-            <section class="col-md-8 col-md-offset-1">                
+            <section class="col-md-8 col-md-offset-1"> 
+                <h1 class="text-center">Rendez-vous</h1>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>date</th>
                             <th>Informations</th>
+                            <th>Mon Statut</th>
                             <th>Utilisateur</th>
-                            <th>statut</th>
+                            <th>statut du contact</th>
                             <th>Modifier</th>
                             <th>Supprimer</th>
                         </tr>
@@ -78,15 +83,18 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                             . '<td>'
                             . $rdv["commentaire"]
                             . '</td>'
-                            . '<td>';
-                            foreach ($rdv["personnes"] as $personne) {
-                                echo $personne["prenom"] . " " .$personne["nom"];
-                            };
-                            echo ''
-                            . '</td>'
                             . '<td>'
                             . $rdv["nomStatut"]
-                            . '</td>'
+                            . '</td>';
+                            foreach ($rdv["personnes"] as $personne) {
+                                echo '<td>'
+                                . $personne["prenom"] . " " . $personne["nom"]
+                                . '</td>'
+                                . '<td>'
+                                . $personne["statutPersonne"]
+                                . '</td>';
+                            };
+                            echo ''
                             . '<td>'
                             . '<a href="editerRdv.php?idRdv=' . $rdv["idRdv"] . '"><span class="glyphicon glyphicon-cog"></span></a>'
                             . '</td>'
@@ -101,19 +109,14 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             </section>
             <aside class="col-md-2 col-md-offset-1 asideMenu">
                 <nav>
-                    <ul class="nav nav-pills nav-stacked span2">
-                        <li>bienvenue <?php echo $_SESSION["email"] ?></li>
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                        
-                        <li><a href="compte.php">Compte</a></li>
+                    <ul class="nav nav-pills nav-stacked span2">                        
+                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
                         <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>
-                        <li><a href="CreerRendezVous.php?idUtilisateur=1">Creer RDV</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
                     </ul>
                 </nav>
             </aside>
-        </section>
-        <input type="hidden" id="rayonConnecte" value="<?php echo $_SESSION["rayon"]; ?>"/>
-        <footer></footer>
+        </section>       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     </body>

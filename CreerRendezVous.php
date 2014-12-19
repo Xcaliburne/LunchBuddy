@@ -9,15 +9,17 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     } else {
         header('Location: index.php');
     }
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["submit"])) {
         if (!empty($_POST["commentaire"])) {
             $idUtilisateurInvite = $_GET["idUtilisateur"];
             $idUtilisateur = $_SESSION["idUtilisateur"];
             $commentaire = $_POST["commentaire"];
             include_once 'groupesdb.php';
             $idGroupe = ajoutGroupe($_SESSION["email"]);
-            ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe);
-            ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe);
+            $statut = 1;
+            $statutInvite = 3;
+            ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
+            ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
             $date = getdate();
             $date = $date["year"] . "-" . $date["mon"] . "-" . $date["mday"];
             ajoutRendezvous($idGroupe, $date, $commentaire);
@@ -54,9 +56,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 </header>
                 <section class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="">Compte</a></li>
-                        <li><a href="">Rendez-vous</a></li>
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        <li><a href="parametres.php">Paramètres</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
+                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
                     </ul>
                 </section>
             </header>
@@ -64,7 +66,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             <section class="col-md-8 col-md-offset-1">                
                 <article>
                     <div class="row">
-                        <h1 class="text-center">Rendez-vous</h1>
+                        <h1 class="text-center">Créer un rendez-vous</h1>
                         <form class="form-horizontal" method="post" action="creerRendezVous.php?idUtilisateur=<?php echo $idUtilisateurInvite ?>">
                             <section class="col-md-6 col-md-offset-3">
                                 <section class="form-group">
@@ -75,7 +77,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 </section>                                 
                                 <section class="col-md-12">
                                     <span class="pull-left alert-info"><?php echo $erreur ?></span>
-                                    <button class="btn btn-default pull-right">Envoyer</button>
+                                    <button name="submit" class="btn btn-default pull-right">Envoyer</button>
                                 </section>
                         </form>
                     </div>
@@ -83,14 +85,13 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             </section>
             <aside class="col-md-2 col-md-offset-1 asideMenu">
                 <nav>
-                    <ul class="nav nav-pills nav-stacked span2">
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                        
-                        <li><a href="parametres.php">Compte</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>
+                    <ul class="nav nav-pills nav-stacked span2">                        
+                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
+                        <li><a href="parametres.php">Paramètres</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
                     </ul>
                 </nav>
             </aside>
-            <footer></footer>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>

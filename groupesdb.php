@@ -16,8 +16,7 @@ function ajoutGroupe($nomGroupe) {
     return $bdd->lastInsertId();
 }
 
-function lireGroupeParidRdv($id)
-{
+function lireGroupeParidRdv($id) {
     $bdd = connexionDb();
     $sql = 'SELECT idGroupe FROM rendezvous WHERE idRdv = :id';
     $requete = $bdd->prepare($sql);
@@ -27,7 +26,7 @@ function lireGroupeParidRdv($id)
 
 function lireRendezVousUtilisateur($idUtilisateur) {
     $bdd = connexionDb();
-    $sql = 'SELECT * FROM rendezvous as r
+    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut FROM rendezvous as r
 join groupes as g on r.idGroupe = g.idGroupe
 join composer as c on c.idGroupe = g.idGroupe
 join statuts as s on c.idStatut = s.idStatut
@@ -37,36 +36,52 @@ where c.idUtilisateur = :idUtilisateur';
     return $requete->fetchAll();
 }
 
-
-function lireStatutParIdGroupe($id) {
+function lireRendezVous($idRdv, $idUtilisateur) {
     $bdd = connexionDb();
-    $sql = 'SELECT idStatut FROM groupes WHERE idGroupe = :id ';
+    $sql = 'SELECT r.commentaire, s.idStatut, s.nomStatut FROM rendezvous as r
+join groupes as g on r.idGroupe = g.idGroupe
+join composer as c on c.idGroupe = g.idGroupe
+join statuts as s on c.idStatut = s.idStatut
+where c.idUtilisateur = :idUtilisateur
+and r.idRdv = :idRdv';
     $requete = $bdd->prepare($sql);
-    $requete->execute(array('id' => $id));
-    return $requete;
-}
-
-function lirerendezvous($idRdv) {
-    $bdd = connexionDb();
-    $sql = 'SELECT * FROM rendezvous WHERE idRdv = :idRdv ';
-    $requete = $bdd->prepare($sql);
-    $requete->execute(array('idRdv' => $idRdv));
+    $requete->execute(array('idRdv' => $idRdv, 'idUtilisateur' => $idUtilisateur));
     return $requete->fetch();
 }
 
-function ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe) {
+function lireStatutParGroupeetUtilisateur($idGroupe, $idUtilisateur) {
     $bdd = connexionDb();
-    $sql = 'INSERT INTO `composer`(`idUtilisateur`, `idGroupe`, `idStatut`) VALUES (:idUtilisateur,:idGroupe,3)';
+    $sql = 'SELECT s.nomStatut FROM statuts as s
+join composer as c on c.idStatut = s.idStatut
+WHERE c.idGroupe = :idGroupe
+and c.idutilisateur = :idUtilisateur';
     $requete = $bdd->prepare($sql);
-    $requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe));
+    $requete->execute(array('idGroupe' => $idGroupe, 'idUtilisateur' => $idUtilisateur));
+    return $requete->fetch();
+}
+
+function ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $idStatut) {
+    $bdd = connexionDb();
+    $sql = 'INSERT INTO `composer`(`idUtilisateur`, `idGroupe`, `idStatut`) VALUES (:idUtilisateur, :idGroupe, :idStatut)';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe, 'idStatut' => $idStatut));
     return $bdd->lastInsertId();
 }
 
-function modifierComposer($idGroupe, $statut) {
+function modifierComposer($idUtilisateur, $idStatut) {
     $bdd = connexionDb();
-    $sql = 'UPDATE composer SET idStatut=:statut WHERE idGroupe=:idGroupe';
+    $sql = 'UPDATE composer SET idStatut = :statut WHERE idUtilisateur = :idUtilisateur';
     $requete = $bdd->prepare($sql);
-    $result = $requete->execute(array('statut' => $statut, 'idGroupe' => $idGroupe));
+    $result = $requete->execute(array('statut' => $idStatut, 'idUtilisateur' => $idUtilisateur));
+    return $result;
+}
+
+function modifierRendezVous($idRdv, $commentaire) {
+    $bdd = connexionDb();
+    $sql = 'UPDATE `rendezvous` SET commentaire = :commentaire 
+    WHERE idRdv = :idRdv;';
+    $requete = $bdd->prepare($sql);
+    $result = $requete->execute(array('idRdv' => $idRdv, 'commentaire' => $commentaire));
     return $result;
 }
 
@@ -88,12 +103,11 @@ function supprimerRendezVous($idRdv) {
     return FALSE;
 }
 
-function supprimerComposer($idUtilisateur, $idGroupe)
-{
+function supprimerComposer($idUtilisateur, $idGroupe) {
     $bdd = connexionDb();
     $sql = 'DELETE FROM composer WHERE idUtilisateur= :idUtilisateur AND idGroupe = :idGroupe';
     $requete = $bdd->prepare($sql);
-    if($requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe))){
+    if ($requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe))) {
         return TRUE;
     }
     return FALSE;

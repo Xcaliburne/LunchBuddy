@@ -67,11 +67,11 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             }
         }
         if ($erreur == "") {
-            header('Location: index.php');//retour à l'accueil
+            header('Location: index.php'); //retour à l'accueil
         }
     }
 } else {
-    header('Location: index.php');//retour à l'accueil
+    header('Location: index.php'); //retour à l'accueil
 }
 ?>
 
@@ -98,9 +98,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 </header>
                 <section class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="">Compte</a></li>
-                        <li><a href="">Rendez-vous</a></li>
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        <li><a href="parametres.php">Paramètres</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
+                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
                     </ul>
                 </section>
             </header>
@@ -169,14 +169,13 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             </section>
             <aside class="col-md-2 col-md-offset-1 asideMenu">
                 <nav>
-                    <ul class="nav nav-pills nav-stacked span2">
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                        
-                        <li><a href="parametres.php">Compte</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>
+                    <ul class="nav nav-pills nav-stacked span2">                        
+                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
+                        <li><a href="parametres.php">Paramètres</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
                     </ul>
                 </nav>
             </aside>
-            <footer></footer>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>

@@ -14,7 +14,7 @@ function initialize(listePersonnes)
 {
     var mapProp = {
         center:new google.maps.LatLng(46.198467, 6.141160),
-        zoom:10,
+        zoom:13,
         mapTypeId:google.maps.MapTypeId.ROADMAP
     };
     map=new google.maps.Map(document.getElementById("googleMap"),mapProp);

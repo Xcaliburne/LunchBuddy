@@ -45,11 +45,6 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
         <script src="./js/JQuery.js" type="text/javascript"></script>
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA"></script>
         <script src="./js/googleMap.js" type="text/javascript"></script>
-
-        <script>
-            window.onload = ajaxLoad;
-            //google.maps.event.addDomListener(window, 'load', initialize);
-        </script>
 <!-- <script src="js/JQuery.js"></script> -->
 <!-- <script src="js/bootstrap.min.js"></script> -->
     </head>
@@ -61,9 +56,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 </section>
                 <section class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="">Compte</a></li>
-                        <li><a href="">Rendez-vous</a></li>
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        <li><a href="parametres.php">Paramètres</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
+                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
                     </ul>
                 </section>
             </header>
@@ -87,19 +82,14 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             </section> 
             <aside class="col-md-2 col-md-offset-1 asideMenu">
                 <nav>
-                    <ul class="nav nav-pills nav-stacked span2">
-                        <li>bienvenue <?php echo $_SESSION["email"] ?></li>
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                        
-                        <li><a href="compte.php">Compte</a></li>
+                    <ul class="nav nav-pills nav-stacked span2">                        
+                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
                         <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>
-                        <li><a href="CreerRendezVous.php?idUtilisateur=1">Creer RDV</a></li>
+                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
                     </ul>
                 </nav>
             </aside>
-        </section>
-        <input type="hidden" id="rayonConnecte" value="<?php echo $_SESSION["rayon"]; ?>"/>
-        <footer></footer>
+        </section>        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     </body>
