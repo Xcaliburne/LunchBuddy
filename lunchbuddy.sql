@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Ven 19 Décembre 2014 à 19:31
+-- Généré le :  Ven 19 Décembre 2014 à 23:50
 -- Version du serveur :  5.6.15-log
 -- Version de PHP :  5.5.8
 
@@ -146,8 +146,6 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
 --
 
 INSERT INTO `rendezvous` (`idRdv`, `dateRdv`, `commentaire`, `idGroupe`) VALUES
-(19, '2014-12-19', 'test', 22),
-(20, '2014-12-19', 'test', 23),
 (21, '2014-12-19', 'un autre rendez-vous avec greg', 24),
 (22, '2014-12-19', 'pizzeria la cité fleurie\r\n12:45', 25);
 
