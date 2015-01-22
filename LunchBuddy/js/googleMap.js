@@ -39,22 +39,6 @@ function ajaxLoad()
  }
  
 
- 
- function calcDistance(LatB, LngB){
-   rad = function(x) {return x*Math.PI/180;}
-
-
-  var R     = 6371;                          //Rayon de la Terre en km
-  var dLat  = rad( LatB - latUser );
-  var dLong = rad( LngB - lngUser );
-
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(latUser)) * Math.cos(rad(LatB)) * Math.sin(dLong/2) * Math.sin(dLong/2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  var d = R * c;
-
-  return d.toFixed(3);                      //Retour 3 décimales
-}
-
    
 
 function extraitMarqueur(map, listePersonne)
@@ -62,8 +46,10 @@ function extraitMarqueur(map, listePersonne)
     var i = 0;
     for(i=0;i<listePersonne.length;i++)
     {
-        var distance = calcDistance(listePersonne[i].lat, listePersonne[i].lng);
-        if(document.getElementById("rayonConnecte").value >= distance)
+        var latlngAutre = new google.maps.LatLng(listePersonne[i].lat, listePersonne[i].lng);
+        var latlngCo = new google.maps.LatLng(latUser, lngUser);
+        var distance = google.maps.geometry.spherical.computeDistanceBetween(latlngCo, latlngAutre);
+        if(document.getElementById("rayonConnecte").value >= distance/1000)
         {
             ajoutMarqueur(map,listePersonne[i].lat,listePersonne[i].lng, listePersonne[i],distance);
         }

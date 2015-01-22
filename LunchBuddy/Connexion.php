@@ -12,13 +12,18 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
             $erreur = '';
             try {
                 $infosPersonnes = lirePersonneConnectee($email, $password);
+                $personne = lireUnePersonneDepuisEmail($email);
                 
                 if (!$infosPersonnes) {
                     $erreur = 'Mot de passe ou Pseudo incorrecte';
                 } else {
+                    
+                    
                     $_SESSION["idUtilisateur"] = $infosPersonnes["idUtilisateur"];
                     $_SESSION["rayon"] = $infosPersonnes["rayon"];
                     $_SESSION["email"] = $email;
+                    $_SESSION["nom"] = $personne["nom"];
+                    $_SESSION["prenom"] = $personne["prenom"];
                             
                     header('Location: index.php');
                 }

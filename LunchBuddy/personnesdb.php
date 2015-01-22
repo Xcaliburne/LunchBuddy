@@ -57,17 +57,17 @@ function inscrirePersonne($email, $password, $nom, $prenom) {
 
 function lireParametresUtilisateur($idUtilisateur) {
     $bdd = connexionDb();
-    $sql = 'SELECT nomRue, numeroRue, NPA, rayon, debutPause, finPause FROM utilisateurs WHERE idUtilisateur = :idUtilisateur';
+    $sql = 'SELECT nomRue, numeroRue, NPA, rayon, debutPause, finPause, avatar FROM utilisateurs WHERE idUtilisateur = :idUtilisateur';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('idUtilisateur' => $idUtilisateur));
     return $requete->fetchAll();
 }
 
-function ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo) {
+function ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $avatar) {
     $bdd = connexionDb();
-    $sql = 'update utilisateurs set nomRue = :adresse, numeroRue = :numeroRue, NPA = :NPA, rayon = :rayon, debutPause = :debutDispo, finPause = :finDispo where idUtilisateur = :idUtilisateur;';
+    $sql = 'update utilisateurs set nomRue = :adresse, numeroRue = :numeroRue, NPA = :NPA, rayon = :rayon, debutPause = :debutDispo, finPause = :finDispo, avatar = :avatar where idUtilisateur = :idUtilisateur;';
     $requete = $bdd->prepare($sql);
-    if ($requete->execute(array('idUtilisateur' => $idUtilisateur, 'adresse' => $adresse, 'numeroRue' => $numeroRue, 'NPA' => $NPA, 'rayon' => $rayon, 'debutDispo' => $debutDispo, 'finDispo' => $finDispo,))) {
+    if ($requete->execute(array('idUtilisateur' => $idUtilisateur, 'adresse' => $adresse, 'numeroRue' => $numeroRue, 'NPA' => $NPA, 'rayon' => $rayon, 'debutDispo' => $debutDispo, 'finDispo' => $finDispo, 'avatar' => $avatar))) {
         return true;
     }
     return false;

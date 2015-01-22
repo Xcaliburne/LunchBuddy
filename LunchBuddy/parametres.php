@@ -29,6 +29,21 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 } else {
                                     $jours = "";
                                 }
+                                if (isset($_FILES) && is_array($_FILES)) {
+                                    $uploaddir = realpath('.') . '/upload/';
+                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+                                    $destination_filename = uniqid('_image_', true) . '.' . $ext;
+                                    
+                                    if($ext=='png' || $ext=='jpg' || $ext=='gif'){
+                                        $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
+                                        
+                                        
+                                    }
+                                    
+                                    
+                                    
+                                    
+                                }
                                 $erreur = "";
                                 $debutDispo = $_POST["debutDispo"] . ":00";
                                 $finDispo = $_POST["finDispo"] . ":00";
@@ -44,7 +59,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     $numeroRue = $_POST["numeroRue"];
                                     $NPA = $_POST["NPA"];
                                     $rayon = $_POST["rayon"];
-                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo)) {
+                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $destination_filename)) {
                                         if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
                                             if (!empty($jours)) {
                                                 foreach ($jours as $jour) {//pour chaque jour
@@ -109,7 +124,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 <article>
                     <div class="row">
                         <h1 class="text-center">Informations du compte</h1>
-                        <form class="form-horizontal" method="post" action="parametres.php">
+                        <form class="form-horizontal" method="post" action="parametres.php" enctype="multipart/form-data">
                             <section class="col-md-6">
                                 <section class="form-group">
                                     <label for="adresse" class="col-md-8 control-label">Adresse*</label>
@@ -129,7 +144,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                         <input type="text" required class="form-control" value="<?php echo $parametres[0]["NPA"] ?>" name="NPA" id="NPA">
                                     </section>
                                 </section>
+                                
                             </section>
+                            
                             <section class="col-md-6">
                                 <section class="form-group">
                                     <label for="rayon" class="col-md-8 control-label">Rayon de disponibilité(en kilomètres)*</label>
@@ -150,6 +167,18 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     </section>
                                 </section>
                             </section>
+                            <section class="col-md-12">
+                                <section class="form-group">
+                                    <label for="avatar" class="col-md-4 control-label">Avatar</label>
+                                    <section class="col-sm-4">
+                                        <span>Selectionnez une image: </span><input type="file" class="form-control" value="" name="avatar" id="avatar" accept="image/*">
+                                    </section>
+                                    <section class="col-sm-4">
+                                        <img src="./upload/<?php echo $parametres[0]["avatar"] ?>" value="<?php echo $parametres[0]["avatar"] ?>" alt="<?php echo $_SESSION["nom"]; echo " "; echo $_SESSION["prenom"] ?>" height="50" width="50"/>
+                                    </section>
+                                </section>
+                            </section>
+                            
                             <fieldset class="col-md-12">
 
                                 <legend>jours de disponibilité:</legend>

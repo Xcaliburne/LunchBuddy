@@ -14,6 +14,7 @@ include_once 'personnesdb.php';
         <link href="css/source.css" type="text/css" rel="stylesheet">
         <script src="./js/JQuery.js" type="text/javascript"></script>
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry"></script>
         <script src="./js/googleMap.js" type="text/javascript"></script>
 
         <script>
