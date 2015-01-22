@@ -5,7 +5,7 @@ if (!isset($_SESSION)) {
 include_once './personnesdb.php';
 $erreur = "";
 if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
-    if ((!empty($_POST["email"])) && (!empty($_POST["password"])) && (!empty($_POST["confirmation"]))) {
+    if ((!empty($_POST["email"])) && (!empty($_POST["nom"])) && (!empty($_POST["prenom"])) && (!empty($_POST["password"])) && (!empty($_POST["confirmation"]))) {
         $email = $_POST["email"];
         $password = sha1($_POST["password"]);
         $nom = $_POST["nom"];
@@ -15,11 +15,11 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
         $uniqueEmail = estUniqueEmail($email);
         if (!$uniqueEmail) {
             $erreur = "Erreur : les mot de passe ne correspondent pas";
-            if ($password == $confirmation) {
+            if ($password == $confirmation){ 
                 $erreur = "";
                 try {
                     $id = inscrirePersonne($email, $password, $nom, $prenom);
-                    $_SESSION["id"] = $id;
+                    $_SESSION["idUtilisateur"] = $id;
                     $_SESSION["email"] = $email;
                     header('Location: index.php');
                 } catch (Exception $ex) {
@@ -66,8 +66,7 @@ and open the template in the editor.
                                     <input class="form-control input-lg" placeholder="Nom" type="text" name="nom">
                                 </section>
                                 <section class="form-group">
-                                    <input class="form-control input-lg" placeholder="Prenom" type="text" name="prenom
-                                           ">
+                                    <input class="form-control input-lg" placeholder="Prenom" type="text" name="prenom">
                                 </section>
                                 <section class="form-group">
                                     <input class="form-control input-lg" placeholder="Mot de passe" type="password" name="password">

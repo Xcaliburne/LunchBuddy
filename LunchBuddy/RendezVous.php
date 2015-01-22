@@ -9,14 +9,14 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $rdvs = lireRendezVousUtilisateur($idUtilisateur);
     foreach ($rdvs as &$rdv) {
         $idGroupe = $rdv["idGroupe"];
-        $personnes = lirePersonnesRdv($idGroupe);        
+        $personnes = lirePersonnesRdv($idGroupe);
         $i = 0;
-        foreach ($personnes as &$personne) {
-            if ($personne["idUtilisateur"] == $idUtilisateur) {
+        foreach ($personnes as &$pers) {
+            if ($pers["idUtilisateur"] == $idUtilisateur) {
                 unset($personnes[$i]);
             } else {
-                $personne["statutPersonne"] = lireStatutParGroupeetUtilisateur($idGroupe, $personne["idUtilisateur"]);
-                $personne["statutPersonne"] = $personne["statutPersonne"]["nomStatut"];
+                $pers["statutPersonne"] = lireStatutParGroupeetUtilisateur($idGroupe, $pers["idUtilisateur"]);
+                $pers["statutPersonne"] = $pers["statutPersonne"]["nomStatut"];
             }
             $i++;
         }
@@ -74,19 +74,19 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($rdvs as $rdv) {
+                        foreach ($rdvs as $rendezvous) {
                             echo ''
                             . '<tr>'
                             . '<td>'
-                            . $rdv["dateRdv"]
+                            . $rendezvous["dateRdv"]
                             . '</td>'
                             . '<td>'
-                            . $rdv["commentaire"]
+                            . $rendezvous["commentaire"]
                             . '</td>'
                             . '<td>'
-                            . $rdv["nomStatut"]
+                            . $rendezvous["nomStatut"]
                             . '</td>';
-                            foreach ($rdv["personnes"] as $personne) {
+                            foreach ($rendezvous["personnes"] as $personne) {
                                 echo '<td>'
                                 . $personne["prenom"] . " " . $personne["nom"]
                                 . '</td>'
@@ -96,10 +96,10 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                             };
                             echo ''
                             . '<td>'
-                            . '<a href="editerRdv.php?idRdv=' . $rdv["idRdv"] . '"><span class="glyphicon glyphicon-cog"></span></a>'
+                            . '<a href="editerRdv.php?idRdv=' . $rendezvous["idRdv"] . '&idGroupe=' . $rendezvous["idGroupe"] . '"><span class="glyphicon glyphicon-cog"></span></a>'
                             . '</td>'
                             . '<td>'
-                            . '<a href="supprimerRdv.php?idRdv=' . $rdv["idRdv"] . '"><span class="glyphicon glyphicon-remove"></span></a>'
+                            . '<a href="supprimerRdv.php?idRdv=' . $rendezvous["idRdv"] . '"><span class="glyphicon glyphicon-remove"></span></a>'
                             . '</td>'
                             . '</tr>';
                         }

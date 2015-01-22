@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Ven 09 Janvier 2015 à 12:42
+-- Généré le :  Ven 19 Décembre 2014 à 23:50
 -- Version du serveur :  5.6.15-log
 -- Version de PHP :  5.5.8
 
@@ -40,36 +40,14 @@ CREATE TABLE IF NOT EXISTS `composer` (
 --
 
 INSERT INTO `composer` (`idUtilisateur`, `idGroupe`, `idStatut`) VALUES
-(1, 27, 1),
-(2, 27, 1),
-(8, 28, 1),
-(9, 28, 1),
-(1, 29, 1),
-(8, 29, 3),
-(1, 30, 2),
-(8, 30, 3),
-(1, 31, 1),
-(9, 31, 3),
-(1, 32, 1),
-(8, 32, 3),
-(1, 33, 1),
-(2, 33, 3),
-(1, 34, 1),
-(9, 34, 3),
-(1, 35, 1),
-(9, 35, 3),
-(1, 36, 3),
-(2, 36, 3),
-(1, 37, 1),
-(9, 37, 3),
-(1, 38, 1),
-(8, 38, 3),
-(1, 39, 1),
-(2, 39, 3),
-(1, 40, 1),
-(9, 40, 3),
-(1, 41, 1),
-(8, 41, 3);
+(1, 22, 1),
+(2, 22, 3),
+(1, 23, 1),
+(2, 23, 3),
+(1, 24, 1),
+(2, 24, 3),
+(1, 25, 1),
+(2, 25, 3);
 
 -- --------------------------------------------------------
 
@@ -91,16 +69,17 @@ CREATE TABLE IF NOT EXISTS `disponible` (
 INSERT INTO `disponible` (`idUtilisateur`, `idJour`) VALUES
 (1, 1),
 (2, 1),
-(1, 2),
-(8, 2),
+(2, 2),
+(4, 2),
+(1, 3),
 (2, 3),
-(8, 3),
+(4, 3),
 (1, 4),
-(9, 4),
+(2, 4),
+(4, 4),
 (1, 5),
 (2, 5),
-(8, 5),
-(9, 5);
+(4, 5);
 
 -- --------------------------------------------------------
 
@@ -112,28 +91,17 @@ CREATE TABLE IF NOT EXISTS `groupes` (
   `idGroupe` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(25) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`idGroupe`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=42 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=26 ;
 
 --
 -- Contenu de la table `groupes`
 --
 
 INSERT INTO `groupes` (`idGroupe`, `nom`) VALUES
-(27, 'gregory@gmail.com'),
-(28, 'robin@gmail.com'),
-(29, 'lu.gindre@gmail.com'),
-(30, 'lu.gindre@gmail.com'),
-(31, 'lu.gindre@gmail.com'),
-(32, 'lu.gindre@gmail.com'),
-(33, 'lu.gindre@gmail.com'),
-(34, 'lu.gindre@gmail.com'),
-(35, 'lu.gindre@gmail.com'),
-(36, 'lu.gindre@gmail.com'),
-(37, 'lu.gindre@gmail.com'),
-(38, 'lu.gindre@gmail.com'),
-(39, 'lu.gindre@gmail.com'),
-(40, 'lu.gindre@gmail.com'),
-(41, 'lu.gindre@gmail.com');
+(22, 'lu.gindre@gmail.com'),
+(23, 'lu.gindre@gmail.com'),
+(24, 'lu.gindre@gmail.com'),
+(25, 'lu.gindre@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -171,14 +139,15 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
   `idGroupe` int(11) NOT NULL,
   PRIMARY KEY (`idRdv`),
   KEY `idGroupe` (`idGroupe`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=23 ;
 
 --
 -- Contenu de la table `rendezvous`
 --
 
 INSERT INTO `rendezvous` (`idRdv`, `dateRdv`, `commentaire`, `idGroupe`) VALUES
-(25, '2015-01-09', 'Sandwicherie onex 12:15', 28);
+(21, '2014-12-19', 'un autre rendez-vous avec greg', 24),
+(22, '2014-12-19', 'pizzeria la cité fleurie\r\n12:45', 25);
 
 -- --------------------------------------------------------
 
@@ -223,17 +192,16 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `finPause` time NOT NULL,
   PRIMARY KEY (`idUtilisateur`),
   UNIQUE KEY `pseudo` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=5 ;
 
 --
 -- Contenu de la table `utilisateurs`
 --
 
 INSERT INTO `utilisateurs` (`idUtilisateur`, `nom`, `prenom`, `email`, `password`, `NPA`, `nomRue`, `numeroRue`, `rayon`, `lat`, `lng`, `debutPause`, `finPause`) VALUES
-(1, 'Gindre', 'Ludovic', 'lu.gindre@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1213', 'Chemin Gerard-de-ternier', '6', 18, '46.195033400000000000000000000000', '6.109267100000011000000000000000', '12:00:00', '13:00:00'),
-(2, 'Mendez', 'Gregory', 'gregory@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1219', 'Avenue du lignon', '11', 12, '46.201140700000000000000000000000', '6.093081900000016000000000000000', '12:00:00', '13:00:00'),
-(8, 'Pisanello', 'Antonio', 'antonio@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1213', 'Bois de la chapelle', '5', 15, '46.191636000000000000000000000000', '6.109068000000000000000000000000', '12:00:00', '13:00:00'),
-(9, 'Plojoux', 'Robin', 'robin@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1213', 'Chemin des esserts', '5', 8, '46.190285000000000000000000000000', '6.114245000000000000000000000000', '12:00:00', '13:00:00');
+(1, 'Gindre', 'Ludovic', 'lu.gindre@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1213', 'Chemin Gerard-de-ternier', '4', 5, '46.195033400000000000000000000000', '6.109267100000011000000000000000', '12:00:00', '13:00:00'),
+(2, 'Mendez', 'Gregory', 'gregory@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1219', 'Avenue du lignon', '12', 12, '46.201140700000000000000000000000', '6.093081900000016000000000000000', '12:00:00', '13:00:00'),
+(4, 'user2', 'user2', 'test@yopmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1219', 'Chemin J. Philibert-de-Sa', '5', 2, NULL, NULL, '14:00:00', '15:00:00');
 
 --
 -- Contraintes pour les tables exportées

@@ -68,11 +68,11 @@ function ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $idStatut) {
     return $bdd->lastInsertId();
 }
 
-function modifierComposer($idUtilisateur, $idStatut) {
+function modifierComposer($idUtilisateur, $idGroupe, $idStatut) {
     $bdd = connexionDb();
-    $sql = 'UPDATE composer SET idStatut = :statut WHERE idUtilisateur = :idUtilisateur';
+    $sql = 'UPDATE composer SET idStatut = :statut WHERE idUtilisateur = :idUtilisateur and idGroupe = :idGroupe';
     $requete = $bdd->prepare($sql);
-    $result = $requete->execute(array('statut' => $idStatut, 'idUtilisateur' => $idUtilisateur));
+    $result = $requete->execute(array('statut' => $idStatut, 'idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe));
     return $result;
 }
 

@@ -6,8 +6,9 @@ $erreur = "";
 include_once 'groupesdb.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
-    if (!empty($_GET["idRdv"])) {
+    if ((!empty($_GET["idRdv"])) && (!empty($_GET["idGroupe"]))) {
         $idRdv = $_GET["idRdv"];
+        $idGroupe = $_GET["idGroupe"];
     } else {
         header('Location: index.php');
     }
@@ -17,7 +18,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 $commentaire = $_POST["commentaire"];
                 $statut = $_POST['statut'];                
                 modifierRendezVous($idRdv, $commentaire);
-                modifierComposer($idUtilisateur, $statut);
+                modifierComposer($idUtilisateur, $idGroupe, $statut);
                 header('Location: RendezVous.php');
             }
         } else {
@@ -69,7 +70,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 <article>
                     <div class="row">
                         <h1 class="text-center">Editer un rendez-vous</h1>
-                        <form class="form-horizontal" method="post" action="editerRdv.php?idRdv=<?php echo $idRdv ?>">
+                        <form class="form-horizontal" method="post" action="editerRdv.php?idRdv=<?php echo $idRdv ?>&idGroupe=<?php echo $idGroupe ?>">
                             <section class="col-md-6 col-md-offset-3">
                                 <section class="form-group">
                                     <label for="commentaire" class="col-md-8 control-label">Entrez les informations du rendez-vous</label>
