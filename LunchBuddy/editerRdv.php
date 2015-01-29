@@ -4,6 +4,7 @@ if (!isset($_SESSION)) {
 }
 $erreur = "";
 include_once 'groupesdb.php';
+include_once './MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
     if ((!empty($_GET["idRdv"])) && (!empty($_GET["idGroupe"]))) {
@@ -14,9 +15,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($_POST["commentaire"])) {
-            if (!empty($_POST["statut"]) && (is_numeric($_POST["statut"]))) {                
+            if (!empty($_POST["statut"]) && (is_numeric($_POST["statut"]))) {
                 $commentaire = $_POST["commentaire"];
-                $statut = $_POST['statut'];                
+                $statut = $_POST['statut'];
                 modifierRendezVous($idRdv, $commentaire);
                 modifierComposer($idUtilisateur, $idGroupe, $statut);
                 header('Location: RendezVous.php');
@@ -24,7 +25,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
         } else {
             $erreur = "veuillez entrer les informations du rendez-vous";
         }
-    }else{
+    } else {
         $infosRdv = lireRendezVous($idRdv, $idUtilisateur);
         $liste = array("1" => "Accepter", "2" => "Refuser", "3" => "Attendre");
         include_once './outilsFormulaires.php';
@@ -53,20 +54,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     </head>
     <body>
         <section class="col-md-12 conteneur">
-            <header class="navbar-inverse">
-                <header class="navbar-header">
-                    <a class="navbar-brand" href="Index.php">LunchBuddy</a>
-                </header>
-                <section class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
-                    </ul>
-                </section>
-            </header>
+            <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
-            <section class="col-md-8 col-md-offset-1">                
+            <section class="col-md-12">                
                 <article>
                     <div class="row">
                         <h1 class="text-center">Editer un rendez-vous</h1>
@@ -94,15 +84,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                     </div>
                 </article>
             </section>
-            <aside class="col-md-2 col-md-offset-1 asideMenu">
-                <nav>
-                    <ul class="nav nav-pills nav-stacked span2">                        
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
-                    </ul>
-                </nav>
-            </aside>
+            <?php AfficheFooter(); ?>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>

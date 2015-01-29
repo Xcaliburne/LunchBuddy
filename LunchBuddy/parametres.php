@@ -5,6 +5,7 @@ if (!isset($_SESSION)) {
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     include_once './personnesdb.php';
     include_once './outilsFormulaires.php';
+    include_once './MenusHTML.php';
     $erreur = "";
     $regex = "#([01][0-9]|2[0-3]):[0-5][0-9]#"; //expression régulière d'une heure
     $idUtilisateur = $_SESSION["idUtilisateur"];
@@ -107,62 +108,49 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     </head>
     <body>
         <section class="col-md-12 conteneur">
-            <header class="navbar-inverse">
-                <header class="navbar-header">
-                    <a class="navbar-brand" href="Index.php">LunchBuddy</a>
-                </header>
-                <section class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
-                    </ul>
-                </section>
-            </header>
+            <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
-            <section class="col-md-8 col-md-offset-1">                
+            <section class="col-md-12">                
                 <article>
                     <div class="row">
                         <h1 class="text-center">Informations du compte</h1>
                         <form class="form-horizontal" method="post" action="parametres.php" enctype="multipart/form-data">
-                            <section class="col-md-6">
+                            <section class="col-md-5">
                                 <section class="form-group">
-                                    <label for="adresse" class="col-md-8 control-label">Adresse*</label>
-                                    <section class="col-sm-4">
+                                    <label for="adresse" class="control-label">Adresse*</label>
+                                    <section class="">
                                         <input type="text" required class="form-control" value="<?php echo $parametres[0]["nomRue"] ?>" name="adresse" id="adresse">
                                     </section>
                                 </section>
                                 <section class="form-group">
-                                    <label for="numeroRue" class="col-md-8 control-label">N° de rue*</label>
-                                    <section class="col-sm-4">
+                                    <label for="numeroRue" class="control-label">N° de rue*</label>
+                                    <section class="">
                                         <input type="text" required class="form-control" value="<?php echo $parametres[0]["numeroRue"] ?>" name="numeroRue" id="numeroRue">
                                     </section>
                                 </section>
                                 <section class="form-group">
-                                    <label for="NPA" class="col-md-8 control-label">NPA*</label>
-                                    <section class="col-sm-4">
+                                    <label for="NPA" class="control-label">NPA*</label>
+                                    <section class="">
                                         <input type="text" required class="form-control" value="<?php echo $parametres[0]["NPA"] ?>" name="NPA" id="NPA">
                                     </section>
                                 </section>
                                 
                             </section>
-                            
-                            <section class="col-md-6">
                                 <section class="form-group">
-                                    <label for="rayon" class="col-md-8 control-label">Rayon de disponibilité(en kilomètres)*</label>
-                                    <section class="col-sm-4">
+                                    <label for="rayon" class="control-label">Rayon de disponibilité(en kilomètres)*</label>
+                                    <section class="">
                                         <input type="number" required class="form-control" value="<?php echo $parametres[0]["rayon"] ?>" name="rayon" id="rayon">
                                     </section>
                                 </section>
                                 <section class="form-group">
-                                    <label for="debutDispo" class="col-md-8 control-label">Début de la disponibilité*</label>
-                                    <section class="col-sm-4">
+                                    <label for="debutDispo" class="control-label">Début de la disponibilité*</label>
+                                    <section class="">
                                         <input type="text" required class="form-control" value="<?php echo $parametres[0]["debutPause"] ?>" name="debutDispo" id="debutDispo">
                                     </section>
                                 </section>                                
                                 <section class="form-group">
-                                    <label for="finDispo" class="col-md-8 control-label">Fin de la disponibilité*</label>
-                                    <section class="col-sm-4">
+                                    <label for="finDispo" class="control-label">Fin de la disponibilité*</label>
+                                    <section class="">
                                         <input type="text" required class="form-control" value="<?php echo $parametres[0]["finPause"] ?>" name="finDispo" id="finDispo">
                                     </section>
                                 </section>
@@ -196,15 +184,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                     </div>
                 </article>
             </section>
-            <aside class="col-md-2 col-md-offset-1 asideMenu">
-                <nav>
-                    <ul class="nav nav-pills nav-stacked span2">                        
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
-                    </ul>
-                </nav>
-            </aside>
+            <?php AfficheFooter(); ?>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>

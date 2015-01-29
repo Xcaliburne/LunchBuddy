@@ -13,11 +13,11 @@ and open the template in the editor.
 }
 
 #googleMap{
-    height: 580px;
+    height: 500px;
 }
 
 .conteneur{
-    padding: 0px;
+    padding: 50px;
     //margin-left: 300px;
 }
 
@@ -40,4 +40,8 @@ height:100px;
 max-height:100px; 
 width:100%; 
 max-width:100%; 
+}
+
+.navbar-fixed-top{
+    padding-right: 15px;
 }

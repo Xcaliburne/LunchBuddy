@@ -4,6 +4,7 @@ if (!isset($_SESSION)) {
 }
 include_once 'personnesdb.php';
 include_once 'groupesdb.php';
+include_once './MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     if (!empty($_GET["idRdv"])) {
         $idRdv = $_GET["idRdv"];
@@ -50,20 +51,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     </head>
     <body>
         <section class="col-md-12 conteneur">
-            <header class="navbar-inverse">
-                <section class="navbar-header">
-                    <a class="navbar-brand" href="Index.php">LunchBuddy</a>
-                </section>
-                <section class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
-                    </ul>
-                </section>
-            </header>
+            <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
-            <section class="col-md-8 col-md-offset-1">                
+            <section class="col-md-12">                
                 <article>
                     <div class="row">
                         <h1 class="text-center">Suppression</h1>             
@@ -80,15 +70,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                     </div>
                 </article>              
             </section> 
-            <aside class="col-md-2 col-md-offset-1 asideMenu">
-                <nav>
-                    <ul class="nav nav-pills nav-stacked span2">                        
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
-                    </ul>
-                </nav>
-            </aside>
+            <?php Affichefooter(); ?>
         </section>        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
