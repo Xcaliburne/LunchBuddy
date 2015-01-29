@@ -32,18 +32,21 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 }
                                 if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
                                     $uploaddir = realpath('.') . '/upload/';
+                                    $ancienAvatar = './upload/'.$parametres[0]["avatar"];
+                                    unlink($ancienAvatar);
                                     $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
                                     $filesize = filesize($_FILES['avatar']['tmp_name']);
                                     $destination_filename = uniqid('_image_', true) . '.' . $ext;
                                     $avatar = $destination_filename;
-
+                                    
                                     if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
-                                        if($filesize > 1024*1024*0.2){
+                                        if($filesize < 1024*1024*1024*0.2){//taille du fichier plus petit de 2MB admis
+                                            
                                             $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
                                         }else{
                                             $avatar = NULL;
                                         }
-                                        
+                                      echo $filesize;  
                                     }
                                 }
                                 $erreur = "";
@@ -85,11 +88,11 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             }
         }
         if ($erreur == "") {
-            header('Location: index.php'); //retour à l'accueil
+           header('Location: parametres.php'); //retour à l'accueil
         }
     }
 } else {
-    header('Location: index.php'); //retour à l'accueil
+    header('Location: parametres.php'); //retour à l'accueil
 }
 ?>
 
