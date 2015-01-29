@@ -30,13 +30,20 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 } else {
                                     $jours = "";
                                 }
-                                if (isset($_FILES) && is_array($_FILES)) {
+                                if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
                                     $uploaddir = realpath('.') . '/upload/';
-                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
+                                    $filesize = filesize($_FILES['avatar']['tmp_name']);
                                     $destination_filename = uniqid('_image_', true) . '.' . $ext;
+                                    $avatar = $destination_filename;
 
                                     if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
-                                        $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
+                                        if($filesize > 1024*1024*0.2){
+                                            $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
+                                        }else{
+                                            $avatar = NULL;
+                                        }
+                                        
                                     }
                                 }
                                 $erreur = "";
@@ -54,7 +61,8 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     $numeroRue = $_POST["numeroRue"];
                                     $NPA = $_POST["NPA"];
                                     $rayon = $_POST["rayon"];
-                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $destination_filename)) {
+                                    
+                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $avatar)) {
                                         if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
                                             if (!empty($jours)) {
                                                 foreach ($jours as $jour) {//pour chaque jour

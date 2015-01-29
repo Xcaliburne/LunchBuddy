@@ -65,9 +65,21 @@ function lireParametresUtilisateur($idUtilisateur) {
 
 function ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $avatar) {
     $bdd = connexionDb();
-    $sql = 'update utilisateurs set nomRue = :adresse, numeroRue = :numeroRue, NPA = :NPA, rayon = :rayon, debutPause = :debutDispo, finPause = :finDispo, avatar = :avatar where idUtilisateur = :idUtilisateur;';
+    $sql = 'update utilisateurs set nomRue = :adresse, numeroRue = :numeroRue, NPA = :NPA, rayon = :rayon, debutPause = :debutDispo, finPause = :finDispo';
+    $paramArray = array('idUtilisateur' => $idUtilisateur, 'adresse' => $adresse, 'numeroRue' => $numeroRue, 'NPA' => $NPA, 'rayon' => $rayon, 'debutDispo' => $debutDispo, 'finDispo' => $finDispo);
+    $avatarParamArray;
+    if($avatar != NULL){
+        $sql .= ", avatar = :avatar";
+        $avatarParamArray = array( 'avatar'=> $avatar);
+        $paramArray = array_merge($paramArray, $avatarParamArray);
+    }
+    echo "<pre>";
+    var_dump($paramArray);
+    echo $sql;
+    echo "<\pre>";
+    $sql .= ' where idUtilisateur = :idUtilisateur;';
     $requete = $bdd->prepare($sql);
-    if ($requete->execute(array('idUtilisateur' => $idUtilisateur, 'adresse' => $adresse, 'numeroRue' => $numeroRue, 'NPA' => $NPA, 'rayon' => $rayon, 'debutDispo' => $debutDispo, 'finDispo' => $finDispo, 'avatar' => $avatar))) {
+    if ($requete->execute($paramArray)) {
         return true;
     }
     return false;
