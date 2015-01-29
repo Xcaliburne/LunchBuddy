@@ -34,16 +34,10 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     $uploaddir = realpath('.') . '/upload/';
                                     $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
                                     $destination_filename = uniqid('_image_', true) . '.' . $ext;
-                                    
-                                    if($ext=='png' || $ext=='jpg' || $ext=='gif'){
+
+                                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
                                         $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
-                                        
-                                        
                                     }
-                                    
-                                    
-                                    
-                                    
                                 }
                                 $erreur = "";
                                 $debutDispo = $_POST["debutDispo"] . ":00";
@@ -112,79 +106,81 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             <!-- Fixed navbar -->
             <section class="col-md-12">                
                 <article>
-                    <div class="row">
-                        <h1 class="text-center">Informations du compte</h1>
-                        <form class="form-horizontal" method="post" action="parametres.php" enctype="multipart/form-data">
-                            <section class="col-md-5">
-                                <section class="form-group">
-                                    <label for="adresse" class="control-label">Adresse*</label>
-                                    <section class="">
-                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["nomRue"] ?>" name="adresse" id="adresse">
-                                    </section>
-                                </section>
-                                <section class="form-group">
-                                    <label for="numeroRue" class="control-label">N° de rue*</label>
-                                    <section class="">
-                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["numeroRue"] ?>" name="numeroRue" id="numeroRue">
-                                    </section>
-                                </section>
-                                <section class="form-group">
-                                    <label for="NPA" class="control-label">NPA*</label>
-                                    <section class="">
-                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["NPA"] ?>" name="NPA" id="NPA">
-                                    </section>
-                                </section>
-                                
-                            </section>
-                                <section class="form-group">
-                                    <label for="rayon" class="control-label">Rayon de disponibilité(en kilomètres)*</label>
-                                    <section class="">
-                                        <input type="number" required class="form-control" value="<?php echo $parametres[0]["rayon"] ?>" name="rayon" id="rayon">
-                                    </section>
-                                </section>
-                                <section class="form-group">
-                                    <label for="debutDispo" class="control-label">Début de la disponibilité*</label>
-                                    <section class="">
-                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["debutPause"] ?>" name="debutDispo" id="debutDispo">
-                                    </section>
-                                </section>                                
-                                <section class="form-group">
-                                    <label for="finDispo" class="control-label">Fin de la disponibilité*</label>
-                                    <section class="">
-                                        <input type="text" required class="form-control" value="<?php echo $parametres[0]["finPause"] ?>" name="finDispo" id="finDispo">
-                                    </section>
-                                </section>
-                            </section>
-                            <section class="col-md-12">
-                                <section class="form-group">
-                                    <label for="avatar" class="col-md-4 control-label">Avatar</label>
-                                    <section class="col-sm-4">
-                                        <span>Selectionnez une image: </span><input type="file" class="form-control" value="" name="avatar" id="avatar" accept="image/*">
-                                    </section>
-                                    <section class="col-sm-4">
-                                        <img src="./upload/<?php echo $parametres[0]["avatar"] ?>" value="<?php echo $parametres[0]["avatar"] ?>" alt="<?php echo $_SESSION["nom"]; echo " "; echo $_SESSION["prenom"] ?>" height="50" width="50"/>
-                                    </section>
-                                </section>
-                            </section>
-                            
-                            <fieldset class="col-md-12">
 
-                                <legend>jours de disponibilité:</legend>
-                                <?php
-                                foreach ($checkboxes as $checkboxe) {
-                                    echo $checkboxe;
-                                }
-                                ?>                                
-                            </fieldset>
-                            <section class="col-md-12">
-                                <span class="pull-left alert-info"><?php echo $erreur ?></span>
-                                <button class="btn btn-default pull-right">Envoyer</button>
+                    <h1 class="text-center">Informations du compte</h1>
+                    <form class="form-horizontal" method="post" action="parametres.php" enctype="multipart/form-data">
+                        <section class="col-md-5">
+                            <section class="form-group">
+                                <label for="adresse" class="control-label">Adresse*</label>
+                                <section class="">
+                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["nomRue"] ?>" name="adresse" id="adresse">
+                                </section>
                             </section>
-                        </form>
-                    </div>
+                            <section class="form-group">
+                                <label for="numeroRue" class="control-label">N° de rue*</label>
+                                <section class="">
+                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["numeroRue"] ?>" name="numeroRue" id="numeroRue">
+                                </section>
+                            </section>
+                            <section class="form-group">
+                                <label for="NPA" class="control-label">NPA*</label>
+                                <section class="">
+                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["NPA"] ?>" name="NPA" id="NPA">
+                                </section>
+                            </section>
+                        </section>
+                        <section class="col-md-5 col-md-offset-2">
+                            <section class="form-group">
+                                <label for="rayon" class="control-label">Rayon de disponibilité(en kilomètres)*</label>
+                                <section class="">
+                                    <input type="number" required class="form-control" value="<?php echo $parametres[0]["rayon"] ?>" name="rayon" id="rayon">
+                                </section>
+                            </section>
+                            <section class="form-group">
+                                <label for="debutDispo" class="control-label">Début de la disponibilité*</label>
+                                <section class="">
+                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["debutPause"] ?>" name="debutDispo" id="debutDispo">
+                                </section>
+                            </section>                                
+                            <section class="form-group">
+                                <label for="finDispo" class="control-label">Fin de la disponibilité*</label>
+                                <section class="">
+                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["finPause"] ?>" name="finDispo" id="finDispo">
+                                </section>
+                            </section>
+                        </section>                                                 
+                        <fieldset class="col-md-12">
+                            <legend>jours de disponibilité:</legend>
+                            <?php
+                            foreach ($checkboxes as $checkboxe) {
+                                echo $checkboxe;
+                            }
+                            ?>                                
+                        </fieldset>
+                        <section class="col-md-5">
+                            <section class="form-group">
+                                <label for="avatar" class="control-label">Changer d'avatar</label>
+                                <section class="form-group">                                    
+                                    <input type="file" class="form-control" value=""  name="avatar" id="avatar" accept="image/*">                                    
+                                </section>
+                                <section class="">
+                                    <img src="./upload/<?php echo $parametres[0]["avatar"] ?>" value="<?php echo $parametres[0]["avatar"] ?>" alt="<?php
+                                    echo $_SESSION["nom"];
+                                    echo " ";
+                                    echo $_SESSION["prenom"]
+                                    ?>" height="50" width="50"/>
+                                </section>
+                            </section>
+                        </section>  
+                        <section class="col-md-12">
+                            <span class="pull-left alert-info"><?php echo $erreur ?></span>
+                            <button class="btn btn-default pull-right">Envoyer</button>
+                        </section>
+                    </form>
+
                 </article>
             </section>
-            <?php AfficheFooter(); ?>
+<?php AfficheFooter(); ?>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>
