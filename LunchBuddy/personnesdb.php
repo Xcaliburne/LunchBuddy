@@ -65,8 +65,8 @@ function lireParametresUtilisateur($idUtilisateur) {
 
 function ModiferParametres($idUtilisateur, $nom, $prenom, $email, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $avatar) {
     $bdd = connexionDb();
-    $sql = 'update utilisateurs set nom = :nom, prenom = :prenom, email = :email, nomRue = :adresse, numeroRue = :numeroRue, NPA = :NPA, rayon = :rayon, debutPause = :debutDispo, finPause = :finDispo, avatar = :avatar where idUtilisateur = :idUtilisateur;';
-    $paramArray = array('idUtilisateur' => $idUtilisateur, 'adresse' => $adresse, 'numeroRue' => $numeroRue, 'NPA' => $NPA, 'rayon' => $rayon, 'debutDispo' => $debutDispo, 'finDispo' => $finDispo);
+    $sql = 'update utilisateurs set nom = :nom, prenom = :prenom, email = :email, nomRue = :adresse, numeroRue = :numeroRue, NPA = :NPA, rayon = :rayon, debutPause = :debutDispo, finPause = :finDispo';
+    $paramArray = array('idUtilisateur' => $idUtilisateur, 'nom' => $nom, 'prenom'=>$prenom,'email'=>$email, 'adresse' => $adresse, 'numeroRue' => $numeroRue, 'NPA' => $NPA, 'rayon' => $rayon, 'debutDispo' => $debutDispo, 'finDispo' => $finDispo);
     //$avatarParamArray;
     if($avatar != NULL){
         $sql .= ", avatar = :avatar";

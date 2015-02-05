@@ -70,7 +70,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                                 $NPA = $_POST["NPA"];
                                                 $rayon = $_POST["rayon"];
                                                 if (ModiferParametres($idUtilisateur, $nom, $prenom, $email, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $destination_filename)) {
-                                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $avatar)) {
+                                                    
                                                         if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
                                                             if (!empty($jours)) {
                                                                 foreach ($jours as $jour) {//pour chaque jour
@@ -85,7 +85,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                                     } else {
                                                         $erreur = "modification interrompue";
                                                     }
-                                                }
+                                                
                                             }
                                         }
                                     }
