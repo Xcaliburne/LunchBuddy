@@ -76,7 +76,7 @@ function extraitMarqueur(map, listePersonne)
 
 function placeMarker(location) {
  
-  
+ 
   markerRdv = new google.maps.Marker({
     position: location,
     map: map

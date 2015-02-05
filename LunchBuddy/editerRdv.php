@@ -16,6 +16,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($_POST["commentaire"])) {
             if (!empty($_POST["statut"]) && (is_numeric($_POST["statut"]))) {
+                
                 $commentaire = $_POST["commentaire"];
                 $statut = $_POST['statut'];
                 modifierRendezVous($idRdv, $commentaire);
@@ -80,8 +81,8 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     </section>
                                 </section>                                 
                                 <section class="col-md-12">
-                                    <input type="hidden" id="lat" name="lat" value=""/>
-                                    <input type="hidden" id="lng" name="lng" value=""/>
+                                    <input type="hidden" id="lat" name="lat" value="<?php echo $infosRdv["lat"] ?>"/>
+                                    <input type="hidden" id="lng" name="lng" value="<?php echo $infosRdv["lng"] ?>"/>
                                     <span class="pull-left alert-info"><?php echo $erreur ?></span>
                                     <button class="btn btn-default pull-right">Envoyer</button>
                                 </section>
