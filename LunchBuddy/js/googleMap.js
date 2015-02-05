@@ -85,7 +85,7 @@ function placeMarker(location) {
     //content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
   });
   
-  infowindow.open(map,markerRdv);
+  //infowindow.open(map,markerRdv);
   
   
   document.getElementById("lat").value = location.lat();

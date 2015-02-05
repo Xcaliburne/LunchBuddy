@@ -75,8 +75,13 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                             ?>
                                         </div>
                                     </section>
+                                    <section class="col-md-12">                
+                                        <div class="" id="googleMapRdv"></div>                                
+                                    </section>
                                 </section>                                 
                                 <section class="col-md-12">
+                                    <input type="hidden" id="lat" name="lat" value=""/>
+                                    <input type="hidden" id="lng" name="lng" value=""/>
                                     <span class="pull-left alert-info"><?php echo $erreur ?></span>
                                     <button class="btn btn-default pull-right">Envoyer</button>
                                 </section>
@@ -85,6 +90,10 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 </article>
             </section>
             <?php AfficheFooter(); ?>
+            <script>
+                window.onload = initialize("googleMapRdv", null);
+                //google.maps.event.addDomListener(window, 'load', initialize);
+            </script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>
