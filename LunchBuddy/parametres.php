@@ -35,21 +35,28 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                             }
                                             if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
                                                 $uploaddir = realpath('.') . '/upload/';
-                                                $ancienAvatar = './upload/' . $parametres[0]["avatar"];
-                                                unlink($ancienAvatar);
-                                                $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
-                                                $filesize = filesize($_FILES['avatar']['tmp_name']);
-                                                $destination_filename = uniqid('_image_', true) . '.' . $ext;
-                                                $avatar = $destination_filename;
+                                                $ancienAvatar = $parametres[0]["avatar"];
+                                                $pathAncienAvatar = './upload/' . $ancienAvatar;
+                                                
+                                                if($_FILES['avatar']['name']!= NULL){
+                                                    unlink($pathAncienAvatar);
+                                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
+                                                    $filesize = filesize($_FILES['avatar']['tmp_name']);
+                                                    $destination_filename = uniqid('_image_', true) . '.' . $ext;
+                                                    
 
-                                                if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
-                                                    if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
-                                                        $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
-                                                    } else {
-                                                        $avatar = NULL;
+                                                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
+                                                        if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
+                                                            $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
+                                                        } else {
+                                                            $avatar = NULL;
+                                                        }
+                                                        echo $filesize;
                                                     }
-                                                    echo $filesize;
+                                                }else{
+                                                    $destination_filename = $ancienAvatar;
                                                 }
+                                                $avatar = $destination_filename;
                                             }
                                             $erreur = "";
                                             $nom = trim($_POST["nom"]);
