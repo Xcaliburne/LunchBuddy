@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 05 Février 2015 à 08:56
+-- Généré le :  Jeu 05 Février 2015 à 12:44
 -- Version du serveur :  5.6.15-log
 -- Version de PHP :  5.5.8
 
@@ -47,7 +47,13 @@ INSERT INTO `composer` (`idUtilisateur`, `idGroupe`, `idStatut`) VALUES
 (2, 49, 1),
 (9, 49, 3),
 (1, 50, 1),
-(2, 50, 1);
+(2, 50, 1),
+(1, 51, 3),
+(2, 51, 1),
+(1, 52, 3),
+(2, 52, 1),
+(1, 53, 3),
+(2, 53, 1);
 
 -- --------------------------------------------------------
 
@@ -91,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `groupes` (
   `idGroupe` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(25) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`idGroupe`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=51 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=54 ;
 
 --
 -- Contenu de la table `groupes`
@@ -101,7 +107,10 @@ INSERT INTO `groupes` (`idGroupe`, `nom`) VALUES
 (47, 'robin@gmail.com'),
 (48, 'robin@gmail.com'),
 (49, 'gregory@gmail.com'),
-(50, 'gregory@gmail.com');
+(50, 'gregory@gmail.com'),
+(51, 'gregory@gmail.com'),
+(52, 'gregory@gmail.com'),
+(53, 'gregory@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -136,20 +145,23 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
   `idRdv` int(11) NOT NULL AUTO_INCREMENT,
   `dateRdv` date NOT NULL,
   `commentaire` longtext COLLATE latin1_general_ci NOT NULL,
+  `lat` decimal(65,30) NOT NULL,
+  `lng` decimal(65,30) NOT NULL,
   `idGroupe` int(11) NOT NULL,
   PRIMARY KEY (`idRdv`),
   KEY `idGroupe` (`idGroupe`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=36 ;
 
 --
 -- Contenu de la table `rendezvous`
 --
 
-INSERT INTO `rendezvous` (`idRdv`, `dateRdv`, `commentaire`, `idGroupe`) VALUES
-(31, '2015-01-22', 'test', 47),
-(32, '2015-01-22', 'test2', 48),
-(33, '2015-01-22', 'gesgfesg', 49),
-(34, '2015-01-22', 'ze544e4t', 50);
+INSERT INTO `rendezvous` (`idRdv`, `dateRdv`, `commentaire`, `lat`, `lng`, `idGroupe`) VALUES
+(31, '2015-01-22', 'test', '0.000000000000000000000000000000', '0.000000000000000000000000000000', 47),
+(32, '2015-01-22', 'test2', '0.000000000000000000000000000000', '0.000000000000000000000000000000', 48),
+(33, '2015-01-22', 'gesgfesg', '0.000000000000000000000000000000', '0.000000000000000000000000000000', 49),
+(34, '2015-01-22', 'ze544e4t', '0.000000000000000000000000000000', '0.000000000000000000000000000000', 50),
+(35, '2015-02-05', 'heyyy', '46.198062608770860000000000000000', '6.140361106954515000000000000000', 53);
 
 -- --------------------------------------------------------
 
@@ -203,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
 
 INSERT INTO `utilisateurs` (`idUtilisateur`, `nom`, `prenom`, `avatar`, `email`, `password`, `NPA`, `nomRue`, `numeroRue`, `rayon`, `lat`, `lng`, `debutPause`, `finPause`) VALUES
 (1, 'Gindre', 'Ludovic', '_image_54d3218d4476b4.98694254.jpg', 'lu.gindre@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1213', 'Chemin Gerard-de-ternier', '6', 18, '46.195033400000000000000000000000', '6.109267100000011000000000000000', '12:00:00', '13:00:00'),
-(2, 'Mendez', 'Gregory', '_image_54d321bd075ce5.47163987.jpg', 'gregory@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1219', 'Avenue du Lignon', '34', 12, '46.201140700000000000000000000000', '6.093081900000016000000000000000', '12:00:00', '13:00:00'),
+(2, 'Mendez', 'Gregory', '_image_54d323879543c9.03261320.jpg', 'gregory@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1219', 'Avenue du Lignon', '34', 12, '46.201140700000000000000000000000', '6.093081900000016000000000000000', '12:00:00', '13:00:00'),
 (8, 'Pisanello', 'Antonio', NULL, 'antonio@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1213', 'Bois de la chapelle', '5', 15, '46.191636000000000000000000000000', '6.109068000000000000000000000000', '12:00:00', '13:00:00'),
 (9, 'Plojoux', 'Robin', NULL, 'robin@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '1213', 'Chemin des esserts', '5', 8, '46.190285000000000000000000000000', '6.114245000000000000000000000000', '12:00:00', '13:00:00');
 

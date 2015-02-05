@@ -26,7 +26,7 @@ function lireGroupeParidRdv($id) {
 
 function lireRendezVousUtilisateur($idUtilisateur) {
     $bdd = connexionDb();
-    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut FROM rendezvous as r
+    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut, r.lat, r.lng FROM rendezvous as r
 join groupes as g on r.idGroupe = g.idGroupe
 join composer as c on c.idGroupe = g.idGroupe
 join statuts as s on c.idStatut = s.idStatut
@@ -38,7 +38,7 @@ where c.idUtilisateur = :idUtilisateur';
 
 function lireRendezVous($idRdv, $idUtilisateur) {
     $bdd = connexionDb();
-    $sql = 'SELECT r.commentaire, s.idStatut, s.nomStatut FROM rendezvous as r
+    $sql = 'SELECT r.commentaire, s.idStatut, s.nomStatut, r.lat, r.lng FROM rendezvous as r
 join groupes as g on r.idGroupe = g.idGroupe
 join composer as c on c.idGroupe = g.idGroupe
 join statuts as s on c.idStatut = s.idStatut
@@ -85,11 +85,11 @@ function modifierRendezVous($idRdv, $commentaire) {
     return $result;
 }
 
-function ajoutRendezvous($idGroupe, $date, $commentaire) {
+function ajoutRendezvous($idGroupe, $date, $commentaire, $lat, $lng) {
     $bdd = connexionDb();
-    $sql = 'insert into rendezvous (dateRdv, commentaire, idGroupe) values (:date, :commentaire, :idGroupe)';
+    $sql = 'insert into rendezvous (dateRdv, commentaire, lat, lng, idGroupe) values (:date, :commentaire, :lat, :lng, :idGroupe)';
     $requete = $bdd->prepare($sql);
-    $requete->execute(array('date' => $date, 'commentaire' => $commentaire, 'idGroupe' => $idGroupe));
+    $requete->execute(array('date' => $date, 'commentaire' => $commentaire, 'lat'=>$lat, 'lng'=>$lng, 'idGroupe' => $idGroupe));
     return $bdd->lastInsertId();
 }
 

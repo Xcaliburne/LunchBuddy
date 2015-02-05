@@ -4,6 +4,7 @@ if (!isset($_SESSION)) {
 }
 $erreur = "";
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
+    include_once './MenusHTML.php';
     if (!empty($_GET["idUtilisateur"])) {
         $idUtilisateurInvite = $_GET["idUtilisateur"];
     } else {
@@ -11,19 +12,25 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     }
     if (isset($_POST["submit"])) {
         if (!empty($_POST["commentaire"])) {
-            $idUtilisateurInvite = $_GET["idUtilisateur"];
-            $idUtilisateur = $_SESSION["idUtilisateur"];
-            $commentaire = $_POST["commentaire"];
-            include_once 'groupesdb.php';
-            $idGroupe = ajoutGroupe($_SESSION["email"]);
-            $statut = 1;
-            $statutInvite = 3;
-            ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
-            ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
-            $date = getdate();
-            $date = $date["year"] . "-" . $date["mon"] . "-" . $date["mday"];
-            ajoutRendezvous($idGroupe, $date, $commentaire);
-            header('Location: index.php');
+            if(!empty($_POST["lat"]) && !empty($_POST["lng"])){
+                $idUtilisateurInvite = $_GET["idUtilisateur"];
+                $idUtilisateur = $_SESSION["idUtilisateur"];
+                $commentaire = $_POST["commentaire"];
+                $lat = $_POST["lat"];
+                $lng = $_POST["lng"];
+                include_once 'groupesdb.php';
+                $idGroupe = ajoutGroupe($_SESSION["email"]);
+                $statut = 1;
+                $statutInvite = 3;
+                ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
+                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
+                $date = getdate();
+                $date = $date["year"] . "-" . $date["mon"] . "-" . $date["mday"];
+                ajoutRendezvous($idGroupe, $date, $commentaire, $lat, $lng);
+                header('Location: index.php');
+            }else{
+                $erreur = "Veuillez choisir l'emplacement du rendez-vous en cliquant sur la carte";
+            }
         } else {
             $erreur = "veuillez entrer les informations du rendez-vous";
         }
@@ -44,24 +51,15 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
         <link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
         <link href="css/source.css" type="text/css" rel="stylesheet">
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA"></script>
-        <script src="./js/googleMap.js" type="text/javascript"></script>        
+        <script src="./js/googleMap.js" type="text/javascript"></script>  
+        
+        
 <!-- <script src="js/JQuery.js"></script> -->
 <!-- <script src="js/bootstrap.min.js"></script> -->
     </head>
     <body>
         <section class="col-md-12 conteneur">
-            <header class="navbar-inverse">
-                <header class="navbar-header">
-                    <a class="navbar-brand" href="Index.php">LunchBuddy</a>
-                </header>
-                <section class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">     
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li> 
-                        <li><a href="Deconnexion.php"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
-                    </ul>
-                </section>
-            </header>
+            <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
             <section class="col-md-8 col-md-offset-1">                
                 <article>
@@ -74,24 +72,27 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     <section class="col-md-12">
                                         <textarea name="commentaire" rows="5"></textarea>
                                     </section>
+                                   <section class="col-md-12">                
+                                        <div class="" id="googleMapRdv"></div>                                
+                                    </section>
                                 </section>                                 
                                 <section class="col-md-12">
+                                    <input type="hidden" id="lat" name="lat" value=""/>
+                                    <input type="hidden" id="lng" name="lng" value=""/>
                                     <span class="pull-left alert-info"><?php echo $erreur ?></span>
-                                    <button name="submit" class="btn btn-default pull-right">Envoyer</button>
+                                    <button name="submit" class="btn btn-default pull-right" >Envoyer</button>
                                 </section>
                         </form>
                     </div>
                 </article>
             </section>
-            <aside class="col-md-2 col-md-offset-1 asideMenu">
-                <nav>
-                    <ul class="nav nav-pills nav-stacked span2">                        
-                        <li><a href="Deconnexion.php">Déconnexion</a></li>                                                
-                        <li><a href="parametres.php">Paramètres</a></li>
-                        <li><a href="Rendezvous.php">Rendez-vous</a></li>                        
-                    </ul>
-                </nav>
-            </aside>
+            <?php AfficheFooter(); ?>
+            
+            <script>
+                window.onload = initialize("googleMapRdv", null);
+                //google.maps.event.addDomListener(window, 'load', initialize);
+            </script>
+            
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>
