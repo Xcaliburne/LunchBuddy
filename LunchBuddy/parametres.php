@@ -33,23 +33,22 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                             } else {
                                                 $jours = "";
                                             }
-                                if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
+                                            if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
                                                 $uploaddir = realpath('.') . '/upload/';
-                                    $ancienAvatar = './upload/'.$parametres[0]["avatar"];
-                                    unlink($ancienAvatar);
-                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
-                                    $filesize = filesize($_FILES['avatar']['tmp_name']);
+                                                $ancienAvatar = './upload/' . $parametres[0]["avatar"];
+                                                unlink($ancienAvatar);
+                                                $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
+                                                $filesize = filesize($_FILES['avatar']['tmp_name']);
                                                 $destination_filename = uniqid('_image_', true) . '.' . $ext;
-                                    $avatar = $destination_filename;
-                                    
+                                                $avatar = $destination_filename;
+
                                                 if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
-                                        if($filesize < 1024*1024*1024*0.2){//taille du fichier plus petit de 2MB admis
-                                            
-                                                    $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
-                                        }else{
-                                            $avatar = NULL;
-                                        }
-                                      echo $filesize;  
+                                                    if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
+                                                        $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
+                                                    } else {
+                                                        $avatar = NULL;
+                                                    }
+                                                    echo $filesize;
                                                 }
                                             }
                                             $erreur = "";
@@ -71,20 +70,21 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                                 $NPA = $_POST["NPA"];
                                                 $rayon = $_POST["rayon"];
                                                 if (ModiferParametres($idUtilisateur, $nom, $prenom, $email, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $destination_filename)) {
-                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $avatar)) {
-                                                    if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
-                                                        if (!empty($jours)) {
-                                                            foreach ($jours as $jour) {//pour chaque jour
-                                                                if ((is_numeric($jour)) or ( $jour > 1) or ( $jour < 5)) { //si le jour correspond
-                                                                    if (ajouterDisponibilite($idUtilisateur, $jour) == FALSE) {//ajout du jour dans la db
-                                                                        $erreur = "ajout des disponibilités impossible";
+                                                    if (ModiferParametres($idUtilisateur, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $avatar)) {
+                                                        if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
+                                                            if (!empty($jours)) {
+                                                                foreach ($jours as $jour) {//pour chaque jour
+                                                                    if ((is_numeric($jour)) or ( $jour > 1) or ( $jour < 5)) { //si le jour correspond
+                                                                        if (ajouterDisponibilite($idUtilisateur, $jour) == FALSE) {//ajout du jour dans la db
+                                                                            $erreur = "ajout des disponibilités impossible";
+                                                                        }
                                                                     }
                                                                 }
                                                             }
                                                         }
+                                                    } else {
+                                                        $erreur = "modification interrompue";
                                                     }
-                                                } else {
-                                                    $erreur = "modification interrompue";
                                                 }
                                             }
                                         }
@@ -192,10 +192,10 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 </section>
                                 <section class="pull-right">
                                     <img src="./upload/<?php echo $parametres[0]["avatar"] ?>" value="<?php echo $parametres[0]["avatar"] ?>" alt="<?php
-                                    echo $_SESSION["nom"];
-                                    echo " ";
-                                    echo $_SESSION["prenom"]
-                                    ?>" height="50" width="50"/>
+            echo $_SESSION["nom"];
+            echo " ";
+            echo $_SESSION["prenom"]
+            ?>" height="50" width="50"/>
                                 </section>
                             </section>                            
                         </section>                                                 
