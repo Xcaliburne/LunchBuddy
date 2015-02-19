@@ -8,15 +8,15 @@
 require_once './Connexiondb.php';
 require_once './personnesdb.php';
 
-function ajoutGroupe($nomGroupe, $startTransaction = FALSE, $stopTransaction = FALSE) {    
+function ajoutGroupe($nomGroupe, $startTransaction = FALSE, $stopTransaction = FALSE) {
     $bdd = connexionDb();
-    if ($startTransaction){
+    if ($startTransaction) {
         $bdd->beginTransaction();
     }
     $sql = 'insert into groupes (nom) values (:nomGroupe)';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('nomGroupe' => $nomGroupe));
-    if ($stopTransaction){
+    if ($stopTransaction) {
         $bdd->commit();
     }
     return $bdd->lastInsertId();
@@ -24,13 +24,13 @@ function ajoutGroupe($nomGroupe, $startTransaction = FALSE, $stopTransaction = F
 
 function lireGroupeParidRdv($id, $startTransaction = FALSE, $stopTransaction = FALSE) {
     $bdd = connexionDb();
-    if ($startTransaction){
+    if ($startTransaction) {
         $bdd->beginTransaction();
     }
     $sql = 'SELECT idGroupe FROM rendezvous WHERE idRdv = :id';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('id' => $id));
-    if ($stopTransaction){
+    if ($stopTransaction) {
         $bdd->commit();
     }
     return $requete->fetchAll();
@@ -38,16 +38,17 @@ function lireGroupeParidRdv($id, $startTransaction = FALSE, $stopTransaction = F
 
 function lireRendezVousUtilisateur($idUtilisateur, $startTransaction = FALSE, $stopTransaction = FALSE) {
     $bdd = connexionDb();
-    if ($startTransaction){
+    if ($startTransaction) {
         $bdd->beginTransaction();
     }
-join groupes as g on r.idGroupe = g.idGroupe
-join composer as c on c.idGroupe = g.idGroupe
-join statuts as s on c.idStatut = s.idStatut
-where c.idUtilisateur = :idUtilisateur';
+    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut, r.lat, r.lng FROM rendezvous as r
+    join groupes as g on r.idGroupe = g.idGroupe
+    join composer as c on c.idGroupe = g.idGroupe
+    join statuts as s on c.idStatut = s.idStatut
+    where c.idUtilisateur = :idUtilisateur';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('idUtilisateur' => $idUtilisateur));
-    if ($stopTransaction){
+    if ($stopTransaction) {
         $bdd->commit();
     }
     return $requete->fetchAll();
@@ -55,14 +56,15 @@ where c.idUtilisateur = :idUtilisateur';
 
 function lireRendezVous($idRdv, $idUtilisateur, $startTransaction = FALSE, $stopTransaction = FALSE) {
     $bdd = connexionDb();
-    if ($startTransaction){
+    if ($startTransaction) {
         $bdd->beginTransaction();
     }
-join groupes as g on r.idGroupe = g.idGroupe
-join composer as c on c.idGroupe = g.idGroupe
-join statuts as s on c.idStatut = s.idStatut
-where c.idUtilisateur = :idUtilisateur
-and r.idRdv = :idRdv';
+    $sql = 'SELECT r.commentaire, s.idStatut, s.nomStatut, r.lat, r.lng FROM rendezvous as r
+    join groupes as g on r.idGroupe = g.idGroupe
+    join composer as c on c.idGroupe = g.idGroupe
+    join statuts as s on c.idStatut = s.idStatut
+    where c.idUtilisateur = :idUtilisateur
+    and r.idRdv = :idRdv';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('idRdv' => $idRdv, 'idUtilisateur' => $idUtilisateur));
     if ($stopTransaction){
@@ -77,9 +79,9 @@ function lireStatutParGroupeetUtilisateur($idGroupe, $idUtilisateur, $startTrans
         $bdd->beginTransaction();
     }
     $sql = 'SELECT s.nomStatut FROM statuts as s
-join composer as c on c.idStatut = s.idStatut
-WHERE c.idGroupe = :idGroupe
-and c.idutilisateur = :idUtilisateur';
+    join composer as c on c.idStatut = s.idStatut
+    WHERE c.idGroupe = :idGroupe
+    and c.idutilisateur = :idUtilisateur';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('idGroupe' => $idGroupe, 'idUtilisateur' => $idUtilisateur));
     if ($stopTransaction){
@@ -121,8 +123,9 @@ function modifierRendezVous($idRdv, $commentaire, $startTransaction = FALSE, $st
     if ($startTransaction){
         $bdd->beginTransaction();
     }
-    $sql = 'UPDATE `rendezvous` SET commentaire = :commentaire 
-    WHERE idRdv = :idRdv;';
+    $sql = 'UPDATE `rendezvous` SET commentaire = :commentaire
+    WHERE idRdv = :idRdv;
+    ';
     $requete = $bdd->prepare($sql);
     $result = $requete->execute(array('idRdv' => $idRdv, 'commentaire' => $commentaire));
     if ($stopTransaction){
@@ -165,7 +168,7 @@ function supprimerComposer($idUtilisateur, $idGroupe, $startTransaction = FALSE,
     if ($startTransaction){
         $bdd->beginTransaction();
     }
-    $sql = 'DELETE FROM composer WHERE idUtilisateur= :idUtilisateur AND idGroupe = :idGroupe';
+    $sql = 'DELETE FROM composer WHERE idUtilisateur = :idUtilisateur AND idGroupe = :idGroupe';
     $requete = $bdd->prepare($sql);
     if ($requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe))) {
         return TRUE;
@@ -213,9 +216,9 @@ function lirePersonnesRdv($idGroupe, $startTransaction = FALSE, $stopTransaction
     if ($startTransaction){
         $bdd->beginTransaction();
     }
-    $sql = 'select u.idUtilisateur, u.nom, u.prenom, u.email from composer as c 
-join utilisateurs as u on c.idUtilisateur = u.idUtilisateur
-where c.idGroupe = :idGroupe';
+    $sql = 'select u.idUtilisateur, u.nom, u.prenom, u.email from composer as c
+    join utilisateurs as u on c.idUtilisateur = u.idUtilisateur
+    where c.idGroupe = :idGroupe';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('idGroupe' => $idGroupe));
     if ($stopTransaction){
