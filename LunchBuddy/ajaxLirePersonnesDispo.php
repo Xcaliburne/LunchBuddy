@@ -1,7 +1,7 @@
 <?php
 
 //echo "test";
-require_once './personnesdb.php';
+require './personnesdb.php';
 
 $jour = date('N');
 

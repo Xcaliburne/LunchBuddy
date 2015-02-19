@@ -2,7 +2,7 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-include_once './personnesdb.php';
+require './personnesdb.php';
 $erreur = "";
 if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
     if ((!empty($_POST["email"])) && (!empty($_POST["nom"])) && (!empty($_POST["prenom"])) && (!empty($_POST["password"])) && (!empty($_POST["confirmation"]))) {

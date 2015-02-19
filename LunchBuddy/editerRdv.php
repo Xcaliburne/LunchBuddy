@@ -3,8 +3,8 @@ if (!isset($_SESSION)) {
     session_start();
 }
 $erreur = "";
-include_once 'groupesdb.php';
-include_once './MenusHTML.php';
+require 'groupesdb.php';
+require './MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
     if ((!empty($_GET["idRdv"])) && (!empty($_GET["idGroupe"]))) {
@@ -29,7 +29,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     } else {
         $infosRdv = lireRendezVous($idRdv, $idUtilisateur);
         $liste = array("1" => "Accepter", "2" => "Refuser", "3" => "Attendre");
-        include_once './outilsFormulaires.php';
+        require './outilsFormulaires.php';
         $name = "statut";
         $selects = creerselect($name, $liste, $infosRdv["idStatut"]);
     }

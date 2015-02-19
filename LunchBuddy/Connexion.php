@@ -6,7 +6,7 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
     $erreur = "";
     if (isset($_REQUEST['Connexion'])) {
         if ((!empty($_REQUEST['Email'])) && (!empty($_REQUEST['Password']))) {
-            include_once 'personnesdb.php';
+            require 'personnesdb.php';
             $email = $_REQUEST['Email'];
             $password = sha1($_REQUEST['Password']);
             $erreur = '';

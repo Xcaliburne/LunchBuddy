@@ -2,9 +2,9 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-include_once 'personnesdb.php';
-include_once 'groupesdb.php';
-include_once './MenusHTML.php';
+require 'personnesdb.php';
+require 'groupesdb.php';
+require './MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
     $rdvs = lireRendezVousUtilisateur($idUtilisateur);

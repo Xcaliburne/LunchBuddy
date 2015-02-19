@@ -3,9 +3,9 @@ if (!isset($_SESSION)) {
     session_start();
 }
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
-    include_once './personnesdb.php';
-    include_once './outilsFormulaires.php';
-    include_once './MenusHTML.php';
+    require './personnesdb.php';
+    require './outilsFormulaires.php';
+    require './MenusHTML.php';
     $erreur = "";
     $regex = "#([01][0-9]|2[0-3]):[0-5][0-9]#"; //expression régulière d'une heure
     $idUtilisateur = $_SESSION["idUtilisateur"];

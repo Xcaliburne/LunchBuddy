@@ -1,6 +1,6 @@
 <?php
-include_once 'personnesdb.php';
-include_once 'MenusHTML.php';
+require 'personnesdb.php';
+require 'MenusHTML.php';
 ?>
 <!DOCTYPE html>
 <html>

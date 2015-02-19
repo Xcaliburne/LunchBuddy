@@ -4,7 +4,7 @@ if (!isset($_SESSION)) {
 }
 $erreur = "";
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
-    include_once './MenusHTML.php';
+    require './MenusHTML.php';
     if (!empty($_GET["idUtilisateur"])) {
         $idUtilisateurInvite = $_GET["idUtilisateur"];
     } else {
@@ -18,7 +18,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 $commentaire = $_POST["commentaire"];
                 $lat = $_POST["lat"];
                 $lng = $_POST["lng"];
-                include_once 'groupesdb.php';
+                require 'groupesdb.php';
                 $idGroupe = ajoutGroupe($_SESSION["email"]);
                 $statut = 1;
                 $statutInvite = 3;
