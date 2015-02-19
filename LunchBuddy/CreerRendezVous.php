@@ -22,12 +22,21 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 $idGroupe = ajoutGroupe($_SESSION["email"]);
                 $statut = 1;
                 $statutInvite = 3;
-                ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
-                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
+            ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
+            ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
                 $date = getdate();
                 $date = $date["year"] . "-" . $date["mon"] . "-" . $date["mday"];
-                ajoutRendezvous($idGroupe, $date, $commentaire, $lat, $lng);
-                header('Location: index.php');
+            $email = $_SESSION["email"];
+            try {
+                $idGroupe = ajoutGroupe($email, TRUE, FALSE);
+                ajouterUtilisateurDansGroupe(150, $idGroupe, $statutInvite);
+                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
+                ajoutRendezvous($idGroupe, $date, $commentaire, FALSE, TRUE);
+            } catch (Exception $ex) {
+                transactionFail();
+                echo $ex;
+            }
+            header('Location: index.php');
             }else{
                 $erreur = "Veuillez choisir l'emplacement du rendez-vous en cliquant sur la carte";
             }
