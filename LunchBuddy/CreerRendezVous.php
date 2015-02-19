@@ -70,7 +70,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
         <section class="col-md-12 conteneur">
             <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
-            <section class="col-md-8 col-md-offset-1">                
+            <section class="col-md-12">                
                 <article>
                     <div class="row">
                         <h1 class="text-center">Créer un rendez-vous</h1>
@@ -98,7 +98,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             <?php AfficheFooter(); ?>
             
             <script>
-                window.onload = initialize("googleMapRdv", null);
+                window.onload = initialize("googleMapRdv", null, null);
                 //google.maps.event.addDomListener(window, 'load', initialize);
             </script>
             

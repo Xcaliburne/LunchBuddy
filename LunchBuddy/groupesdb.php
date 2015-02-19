@@ -118,16 +118,16 @@ function modifierComposer($idUtilisateur, $idGroupe, $idStatut, $startTransactio
     return $result;
 }
 
-function modifierRendezVous($idRdv, $commentaire, $startTransaction = FALSE, $stopTransaction = FALSE) {
+function modifierRendezVous($idRdv, $commentaire,$lat, $lng, $startTransaction = FALSE, $stopTransaction = FALSE) {
     $bdd = connexionDb();
     if ($startTransaction){
+    
         $bdd->beginTransaction();
     }
-    $sql = 'UPDATE `rendezvous` SET commentaire = :commentaire
-    WHERE idRdv = :idRdv;
-    ';
+    $sql = 'UPDATE `rendezvous` SET commentaire = :commentaire, lat = :lat, lng = :lng 
+    WHERE idRdv = :idRdv;';
     $requete = $bdd->prepare($sql);
-    $result = $requete->execute(array('idRdv' => $idRdv, 'commentaire' => $commentaire));
+    $result = $requete->execute(array('idRdv' => $idRdv, 'commentaire' => $commentaire, 'lat' => $lat, 'lng' => $lng));
     if ($stopTransaction){
         $bdd->commit();
     }
@@ -139,6 +139,7 @@ function ajoutRendezvous($idGroupe, $date, $commentaire, $lat, $lng, $startTrans
     if ($startTransaction){
         $bdd->beginTransaction();
     }
+    $sql = 'insert into rendezvous (dateRdv, commentaire, lat, lng, idGroupe) values (:date, :commentaire, :lat, :lng, :idGroupe)';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('date' => $date, 'commentaire' => $commentaire, 'lat'=>$lat, 'lng'=>$lng, 'idGroupe' => $idGroupe));
     if ($stopTransaction){

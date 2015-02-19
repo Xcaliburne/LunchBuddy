@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 if (!isset($_SESSION)) {
     session_start();
@@ -9,6 +10,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
     if ((!empty($_GET["idRdv"])) && (!empty($_GET["idGroupe"]))) {
         $idRdv = $_GET["idRdv"];
+        $_SESSION["idRdv"]= $idRdv;
         $idGroupe = $_GET["idGroupe"];
     } else {
         header('Location: index.php');
@@ -16,12 +18,15 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($_POST["commentaire"])) {
             if (!empty($_POST["statut"]) && (is_numeric($_POST["statut"]))) {
-                
-                $commentaire = $_POST["commentaire"];
-                $statut = $_POST['statut'];
-                modifierRendezVous($idRdv, $commentaire);
-                modifierComposer($idUtilisateur, $idGroupe, $statut);
-                header('Location: RendezVous.php');
+                if(!empty($_POST["lat"]) && !empty($_POST["lng"])){
+                    $commentaire = $_POST["commentaire"];
+                    $lat = $_POST["lat"];
+                    $lng = $_POST["lng"];   
+                    $statut = $_POST['statut'];
+                    modifierRendezVous($idRdv, $commentaire, $lat, $lng);
+                    modifierComposer($idUtilisateur, $idGroupe, $statut);
+                    header('Location: RendezVous.php');
+                }
             }
         } else {
             $erreur = "veuillez entrer les informations du rendez-vous";
@@ -37,7 +42,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     header('Location: index.php');
 }
 ?>
-<!DOCTYPE html>
+
 <html>
     <head>
         <title>LunchBuddy - Editer rendez-vous</title>
@@ -48,8 +53,18 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
         <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
         <link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
         <link href="css/source.css" type="text/css" rel="stylesheet">
-        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA"></script>
+         
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA" type="text/javascript"></script>
         <script src="./js/googleMap.js" type="text/javascript"></script>        
+        <script>
+            $( document ).ready(function() {
+                ajaxLoadRdv(document.getElementById("idRdv").value,document.getElementById("idUtilisateur").value);
+            });
+                //google.maps.event.addDomListener(window, 'load', initialize);
+            </script>
+        
 <!-- <script src="js/JQuery.js"></script> -->
 <!-- <script src="js/bootstrap.min.js"></script> -->
     </head>
@@ -61,8 +76,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 <article>
                     <div class="row">
                         <h1 class="text-center">Editer un rendez-vous</h1>
-                        <form class="form-horizontal" method="post" action="editerRdv.php?idRdv=<?php echo $idRdv ?>&idGroupe=<?php echo $idGroupe ?>">
-                            <section class="col-md-6 col-md-offset-3">
+                        <form class="form-horizontal" method="post" action="editerRdv.php?idRdv=<?php echo $idRdv ?>&amp;idGroupe=<?php echo $idGroupe ?>">
+                        <!--<form class="form-horizontal" method="post" action="editerRdv.php?idRdv=2&amp;idGroupe=1">-->
+                        <section class="col-md-6 col-md-offset-3">
                                 <section class="form-group">
                                     <label for="commentaire" class="col-md-8 control-label">Entrez les informations du rendez-vous</label>
                                     <section class="col-md-12">
@@ -83,20 +99,18 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 <section class="col-md-12">
                                     <input type="hidden" id="lat" name="lat" value="<?php echo $infosRdv["lat"] ?>"/>
                                     <input type="hidden" id="lng" name="lng" value="<?php echo $infosRdv["lng"] ?>"/>
+                                    <input type="hidden" id="idRdv" name="idRdv" value="<?php echo $idRdv ?>"/>
+                                    <input type="hidden" id="idUtilisateur" name="idUtilisateur" value="<?php echo $idUtilisateur ?>"/>
                                     <span class="pull-left alert-info"><?php echo $erreur ?></span>
                                     <button class="btn btn-default pull-right">Envoyer</button>
                                 </section>
+                            </section>
                         </form>
                     </div>
                 </article>
             </section>
             <?php AfficheFooter(); ?>
-            <script>
-                window.onload = initialize("googleMapRdv", null);
-                //google.maps.event.addDomListener(window, 'load', initialize);
-            </script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-            <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+           
         </section>
     </body>
 </html>

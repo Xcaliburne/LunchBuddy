@@ -12,9 +12,11 @@ navigator.geolocation.getCurrentPosition(function(position) {
    latUser = position.coords.latitude;
    lngUser =position.coords.longitude;
 }, null, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
-function initialize(map_name,listePersonnes)
+
+
+function initialize(map_name,listePersonnes, listeRdv)
 {
-    markerExist = false;
+   markerExist = false; 
     
     var mapProp = {
         center:new google.maps.LatLng(46.198467, 6.141160),
@@ -25,18 +27,21 @@ function initialize(map_name,listePersonnes)
     map=new google.maps.Map(document.getElementById(map_name),mapProp);//Crée la map avec toutes les personnes disponible
     
     if(map_name=="googleMapRdv"){
+       if(listeRdv !== null){
+            ajoutMarqueurRdv(listeRdv);
+        } 
         
-        google.maps.event.addListener(map, 'click', function(event) {
+        google.maps.event.addListener(map, 'click', function(event) {  
         if(markerExist)
             markerRdv.setMap(null);
         
             placeMarker(event.latLng);
         });
     }
-    
-    extraitMarqueur(map, listePersonnes);
+    if(map_name=="googleMap")
+        extraitMarqueur(map, listePersonnes);
 }
- 
+// 
 function ajaxLoad()
 {
     $.ajax({
@@ -44,10 +49,30 @@ function ajaxLoad()
        type : 'GET',
        dataType : 'html',
        success : function(resultat, statut, error){ // success est toujours en place, bien sûr !
-           initialize("googleMap", JSON.parse(resultat));          
+           initialize("googleMap", JSON.parse(resultat), null);          
        },
 
        error : function(resultat, statut, error){
+           alert(error);
+       }
+   });
+ }
+ 
+ function ajaxLoadRdv(rdv, utilisateur)
+{
+    $.ajax({
+       url : 'ajaxLireRendezVous.php',
+       type : 'GET',
+       dataType : 'html',
+       data: "idRdv=" + rdv + "&idUtilisateur=" + utilisateur,
+       success : function(resultat, statut, error){ 
+           console.log(resultat);
+           initialize("googleMapRdv", null, JSON.parse(resultat));          
+       },
+
+       error : function(resultat, statut, error){
+           console.log(resultat);
+           console.log(error);
            alert(error);
        }
    });
@@ -100,6 +125,25 @@ function successCallback(position){
     position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
     map: map
   }); 
+}
+
+function ajoutMarqueurRdv(rdv)
+{
+    var coord = new google.maps.LatLng(rdv.lat, rdv.lng);
+     markerRdv=  new google.maps.Marker({
+         map: map,
+         position: coord,
+         title: rdv.idRdv
+     });
+     
+   
+            
+
+    google.maps.event.addListener(markerRdv, 'click', function() {
+        infowindow.open(map,markerRdv);
+    });
+    
+    markerExist = true;
 }
 
 function ajoutMarqueur(map, lat, lng, personne, rayon)
