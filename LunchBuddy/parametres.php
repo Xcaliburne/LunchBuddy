@@ -6,7 +6,8 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     require './personnesdb.php';
     require './outilsFormulaires.php';
     require './MenusHTML.php';
-    $erreur = "";
+    require './Fonctions.php';
+    $erreurs = array();
     $regex = "#([01][0-9]|2[0-3]):[0-5][0-9]#"; //expression régulière d'une heure
     $idUtilisateur = $_SESSION["idUtilisateur"];
     $parametres = lireParametresUtilisateur($idUtilisateur); //récuperation des paramètres d'un utilisateur
@@ -18,97 +19,84 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     }
     $checkboxes = creerCheckboxes($name, $liste, $checked); //création des checkboxes
     if ($_SERVER["REQUEST_METHOD"] == "POST") { //si la requete est en post
-        $erreur = "veuillez entrer toutes les informations";  //initialisation de l'erreur
-        if (!empty($_POST["nom"])) { //contrôle de la saisie des champs
-            if (!empty($_POST["prenom"])) {
-                if (!empty($_POST["email"])) {
-                    if (!empty($_POST["adresse"])) { //contrôle de la saisie des champs
-                        if (!empty($_POST["numeroRue"])) {
-                            if (!empty($_POST["NPA"])) {
-                                if ((!empty($_POST["rayon"])) && (is_numeric($_POST["rayon"]))) { //si le rayon est renseigné et numerique
-                                    if (!empty($_POST["debutDispo"]) && (preg_match($regex, $_POST["debutDispo"]))) { //si l'heure correspond au format requis
-                                        if (!empty($_POST["finDispo"]) && (preg_match($regex, $_POST["finDispo"]))) { //si l'heure correspond au format requis
-                                            if (isset($_POST["jours"])) {
-                                                $jours = $_POST["jours"];
-                                            } else {
-                                                $jours = "";
-                                            }
-                                            if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
-                                                $uploaddir = realpath('.') . '/upload/';
-                                                $ancienAvatar = $parametres[0]["avatar"];
-                                                $pathAncienAvatar = './upload/' . $ancienAvatar;
-                                                
-                                                if($_FILES['avatar']['name']!= NULL){
-                                                    unlink($pathAncienAvatar);
-                                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
-                                                    $filesize = filesize($_FILES['avatar']['tmp_name']);
-                                                    $destination_filename = uniqid('_image_', true) . '.' . $ext;
-                                                    
+        $aVerifier = array('nom', 'prenom', 'email', 'adresse', 'numeroRue', 'NPA', 'rayon', 'debutDispo', 'finDispo');        
+        $valideSaisie = ValiderSaisie($_POST, $aVerifier);
+        if (empty($valideSaisie)) {
+            if (isset($_POST["jours"])) {
+                $jours = $_POST["jours"];
+            } else {
+                $jours = "";
+            }
+            if (is_numeric($_POST["rayon"])) {//si le rayon est  numerique    
+                if (preg_match($regex, $_POST["debutDispo"])) {//si l'heure correspond au format requis   
+                    if (preg_match($regex, $_POST["finDispo"])) {//si l'heure correspond au format requis                        
+                        $nom = trim($_POST["nom"]);
+                        $prenom = trim($_POST["prenom"]);
+                        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+                        $debutDispo = $_POST["debutDispo"] . ":00";
+                        $finDispo = $_POST["finDispo"] . ":00";
+                        if (ComparerHeures($debutDispo, $finDispo)) {
+                            $adresse = $_POST["adresse"];
+                            $numeroRue = $_POST["numeroRue"];
+                            $NPA = $_POST["NPA"];
+                            $rayon = $_POST["rayon"];
+                            if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
+                                $uploaddir = realpath('.') . '/upload/';
+                                $ancienAvatar = $parametres[0]["avatar"];
+                                $pathAncienAvatar = './upload/' . $ancienAvatar;
 
-                                                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
-                                                        if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
-                                                            $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
-                                                        } else {
-                                                            $avatar = NULL;
-                                                        }
-                                                        echo $filesize;
-                                                    }
-                                                }else{
-                                                    $destination_filename = $ancienAvatar;
-                                                }
-                                                $avatar = $destination_filename;
-                                            }
-                                            $erreur = "";
-                                            $nom = trim($_POST["nom"]);
-                                            $prenom = trim($_POST["prenom"]);
-                                            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
-                                            $debutDispo = $_POST["debutDispo"] . ":00";
-                                            $finDispo = $_POST["finDispo"] . ":00";
-                                            $parsed = date_parse($debutDispo);
-                                            $secondsDebut = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second']; //transformation de l'heure en secondes
-                                            $parsed = date_parse($finDispo);
-                                            $secondsfin = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second']; //transformation de l'heure en secondes
-                                            if ($secondsDebut < $secondsfin) {//
-                                                unset($parsed);
-                                                unset($secondsDebut);
-                                                unset($secondsfin);
-                                                $adresse = $_POST["adresse"];
-                                                $numeroRue = $_POST["numeroRue"];
-                                                $NPA = $_POST["NPA"];
-                                                $rayon = $_POST["rayon"];
-                                                if (ModiferParametres($idUtilisateur, $nom, $prenom, $email, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $destination_filename)) {
-                                                    
-                                                        if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
-                                                            if (!empty($jours)) {
-                                                                foreach ($jours as $jour) {//pour chaque jour
-                                                                    if ((is_numeric($jour)) or ( $jour > 1) or ( $jour < 5)) { //si le jour correspond
-                                                                        if (ajouterDisponibilite($idUtilisateur, $jour) == FALSE) {//ajout du jour dans la db
-                                                                            $erreur = "ajout des disponibilités impossible";
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        $erreur = "modification interrompue";
-                                                    }
-                                                
+                                if ($_FILES['avatar']['name'] != NULL) {
+                                    if (file_exists($pathAncienAvatar))
+                                        unlink($pathAncienAvatar);
+                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
+                                    $filesize = filesize($_FILES['avatar']['tmp_name']);
+                                    $destination_filename = uniqid('_image_', true) . '.' . $ext;
+
+
+                                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
+                                        if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
+                                            $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
+                                        } else {
+                                            $avatar = NULL;
+                                        }
+                                        echo $filesize;
+                                    }
+                                } else {
+                                    $destination_filename = $ancienAvatar;
+                                }
+                                $avatar = $destination_filename;
+                            }
+                            if (ModiferParametres($idUtilisateur, $nom, $prenom, $email, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $destination_filename)) {
+                                if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
+                                    if (!empty($jours)) {
+                                        foreach ($jours as $jour) {//pour chaque jour
+                                            if ((is_numeric($jour)) or ( $jour > 1) or ( $jour < 5)) { //si le jour correspond
+                                                if (ajouterDisponibilite($idUtilisateur, $jour) == FALSE) //ajout du jour dans la db
+                                                    $erreurs[] = 'ajout des disponibilités impossible';
                                             }
                                         }
                                     }
                                 }
+                            } else {
+                                $erreurs[] = 'modification interrompue';
                             }
+                        }  else {
+                            $erreurs[] = 'l\'heure de débute est plus grande que l\'heure de fin';
                         }
                     }
                 }
             }
+        } else {
+            foreach ($valideSaisie as $wrongValue) {
+                $erreurs[] = $wrongValue . ': doit être saisie';
+            }
         }
-        if ($erreur == "") {
-            header('Location: index.php'); //retour à l'accueil
+        if (empty($erreurs)) {
+            //header('Location: index.php'); //retour à l'accueil
         }
     }
 } else {
-    header('Location: parametres.php'); //retour à l'accueil
+    //header('Location: parametres.php'); //retour à l'accueil
 }
 ?>
 
@@ -139,13 +127,13 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                             <section class="form-group">
                                 <label for="nom" class="control-label">Nom*</label>
                                 <section class="">
-                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["nom"] ?>" name="nom" id="nom">
+                                    <input type="text"  class="form-control" value="<?php echo $parametres[0]["nom"] ?>" name="nom" id="nom">
                                 </section>
                             </section>
                             <section class="form-group">
                                 <label for="prenom" class="control-label">Prenom*</label>
                                 <section class="">
-                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["prenom"] ?>" name="prenom" id="prenom">
+                                    <input type="text"  class="form-control" value="<?php echo $parametres[0]["prenom"] ?>" name="prenom" id="prenom">
                                 </section>
                             </section>
                             <section class="form-group">
@@ -199,10 +187,10 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 </section>
                                 <section class="pull-right">
                                     <img src="./upload/<?php echo $parametres[0]["avatar"] ?>" value="<?php echo $parametres[0]["avatar"] ?>" alt="<?php
-            echo $_SESSION["nom"];
-            echo " ";
-            echo $_SESSION["prenom"]
-            ?>" height="50" width="50"/>
+                                    echo $_SESSION["nom"];
+                                    echo " ";
+                                    echo $_SESSION["prenom"]
+                                    ?>" height="50" width="50"/>
                                 </section>
                             </section>                            
                         </section>                                                 
@@ -215,15 +203,20 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                             ?>                                
                         </fieldset>
                         <section class="col-md-5">
-
                         </section>  
                         <section class="col-md-12">
-                            <?php if (!empty($erreur)) { ?>
-                                <div class="pull-left alert alert-danger"><?php echo $erreur; ?></div>
+                            <?php if (!empty($erreurs)) { ?>
+                                <div class="pull-left alert alert-danger">
+                                    <?php
+                                    foreach ($erreurs as $erreur) {
+                                        ?><p><?php
+                                            echo $erreur;
+                                            ?></p><?php
+                                    }
+                                    ?>
+                                </div>
                             <?php } ?>
-
                             <button class="btn btn-default pull-right">Envoyer</button>
-
                         </section>
                     </form>                    
                 </article>

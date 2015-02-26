@@ -20,7 +20,6 @@ function AfficheHeader() {
 function AfficheFooter() {
     ?>
     <footer class=" navbar navbar-inverse navbar-fixed-bottom">
-
     </footer>
     <?php
 }

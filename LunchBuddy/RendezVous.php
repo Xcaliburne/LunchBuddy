@@ -3,7 +3,7 @@ if (!isset($_SESSION)) {
     session_start();
 }
 require 'groupesdb.php';
-require './MenusHTML.php';
+require 'MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
     $rdvs = lireRendezVousUtilisateur($idUtilisateur);

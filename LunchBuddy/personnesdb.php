@@ -4,9 +4,7 @@
 // Fichier: personnesdb.php
 // Description: Fonctions de gestion de la table personnes 
 // Auteurs: Ludovic Gindre et Gregory Mendez
-
 require_once './Connexiondb.php';
-
 /**
  * retourne les données de l'enregistrement idPersonne
  * @param int $idPersonne ID de la personne dont on veut le détail
