@@ -5,7 +5,7 @@
 // Description: Fonctions de gestion de la table personnes 
 // Auteurs: Ludovic Gindre et Gregory Mendez
 
-require './Connexiondb.php';
+require_once './Connexiondb.php';
 
 /**
  * retourne les données de l'enregistrement idPersonne
@@ -132,12 +132,12 @@ function lireCoordoneesPersonne($id)
     
 }
 
-function lirePersonneDisponible($jour)
+function lirePersonneDisponible($jour, $idUtilisateur)
 {
     $bdd = connexionDb();
     $sql = 'SELECT idUtilisateur, nom, prenom, email, NPA, nomRue, numeroRue, lat, lng, debutPause, finPause, avatar FROM utilisateurs AS u '
-            .'NATURAL JOIN disponible AS d WHERE d.idJour = :jour';
+            .'NATURAL JOIN disponible AS d WHERE d.idJour = :jour AND u.idUtilisateur <> :idUtilisateur';
     $requete = $bdd->prepare($sql);
-    $requete-> execute(array('jour'=>$jour));
+    $requete-> execute(array('jour'=>$jour, 'idUtilisateur' => $idUtilisateur));
     return $requete->fetchAll(PDO::FETCH_ASSOC); 
 }

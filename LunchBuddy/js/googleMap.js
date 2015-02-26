@@ -42,12 +42,13 @@ function initialize(map_name,listePersonnes, listeRdv)
         extraitMarqueur(map, listePersonnes);
 }
 // 
-function ajaxLoad()
+function ajaxLoad(utilisateur)
 {
     $.ajax({
        url : 'ajaxLirePersonnesDispo.php',
        type : 'GET',
        dataType : 'html',
+       data: "idUtilisateur=" + utilisateur,
        success : function(resultat, statut, error){ // success est toujours en place, bien sûr !
            initialize("googleMap", JSON.parse(resultat), null);          
        },
@@ -129,11 +130,13 @@ function successCallback(position){
 
 function ajoutMarqueurRdv(rdv)
 {
+    
     var coord = new google.maps.LatLng(rdv.lat, rdv.lng);
      markerRdv=  new google.maps.Marker({
          map: map,
          position: coord,
          title: rdv.idRdv
+          
      });
      
    
@@ -146,6 +149,7 @@ function ajoutMarqueurRdv(rdv)
     markerExist = true;
 }
 
+var infowindows = new Array();
 function ajoutMarqueur(map, lat, lng, personne, rayon)
 {
       var img;
@@ -165,15 +169,26 @@ function ajoutMarqueur(map, lat, lng, personne, rayon)
                                 </div>\n\
                             </div>\n\
                             </form>";
-      
-      var infowindow = new google.maps.InfoWindow({
+  
+      infowindows.push({"infoId" : personne.idUtilisateur, "infowindow": new google.maps.InfoWindow({
             content: contentString
-        });
-        
+        })});
+     
+      var image = {
+        url: 'img/user.png',
+        scaledSize : new google.maps.Size(30, 36)
+            // This marker is 20 pixels wide by 32 pixels tall.
+        //size: new google.maps.Size(50, 62),
+        // The origin for this image is 0,0.
+        //origin: new google.maps.Point(0,0),
+        // The anchor for this image is the base of the flagpole at 0,32.
+       // anchor: new google.maps.Point(0, 0)
+      };
      var coord = new google.maps.LatLng(lat, lng);
      var optionsMarker = {
          map: map,
          position: coord,
+         icon: image, 
          title: personne.nom + ' ' + personne.prenom
      };
      
@@ -182,7 +197,14 @@ function ajoutMarqueur(map, lat, lng, personne, rayon)
             
 
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map,marker);
+        $.each(infowindows, function(index, value) {
+            if(value["infoId"] == personne.idUtilisateur) {
+                value["infowindow"].open(map,marker);
+            } else {
+                  value["infowindow"].close();
+            }
+         });
+//        infowindows[0].open(map,marker);
     });
  }
 

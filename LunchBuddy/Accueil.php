@@ -19,7 +19,9 @@ require 'MenusHTML.php';
         <script src="./js/googleMap.js" type="text/javascript"></script>
 
         <script>
-            window.onload = ajaxLoad;
+            $( document ).ready(function() {
+                ajaxLoad(document.getElementById("idUtilisateur").value);
+            });
             //google.maps.event.addDomListener(window, 'load', initialize);
         </script>
 <!-- <script src="js/JQuery.js"></script> -->
@@ -34,7 +36,10 @@ require 'MenusHTML.php';
             </section>
         </section>
         <?php AfficheFooter(); ?>
-        <input type="hidden" id="rayonConnecte" value="<?php echo $_SESSION["rayon"]; ?>"/>        
+        <form>
+            <input type="hidden" id="rayonConnecte" value="<?php echo $_SESSION["rayon"]; ?>"/>      
+            <input type="hidden" id="idUtilisateur" value="<?php echo $_SESSION["idUtilisateur"]; ?>"/>
+        </form>       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     </body>

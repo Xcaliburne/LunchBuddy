@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require './Connexiondb.php';
+require_once './Connexiondb.php';
 require './personnesdb.php';
 
 function ajoutGroupe($nomGroupe, $startTransaction = FALSE, $stopTransaction = FALSE) {
