@@ -193,15 +193,18 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     }
                                     ?>
                                 </div>
-                            <?php } else { ?>
-                                <div class="pull-left alert alert-success">
-                                    <?php
-                                    ?><span><?php
-                                    echo $confirmation;
-                                    ?></span><?php
+                            <?php } else {
+                                if (!empty($confirmation)) {
                                     ?>
-                                </div>
-                                <?php } ?>
+                                    <div class="pull-left alert alert-success">
+                                        <?php
+                                        ?><span><?php
+                                            echo $confirmation;
+                                            ?></span><?php ?>
+                                    </div>
+                                <?php }
+                            }
+                            ?>
                             <button class="btn btn-default pull-right">Envoyer</button>
                         </section>
                     </form>                    
