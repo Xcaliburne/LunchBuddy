@@ -57,13 +57,13 @@ if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
                 <section class="modal-body">
                     <form class="form col-md-12" method="post" action="index.php">
                         <section class="form-group">
-                            <input name="Email" class="form-control input-lg" placeholder="Email" type="Email">
+                            <input name="Email" class="form-control input-lg form-connexion" placeholder="Email" type="Email">
                         </section>
                         <section class="form-group">
-                            <input name="Password" class="form-control input-lg" placeholder="Mot de passe" type="password">
+                            <input name="Password" class="form-control input-lg form-connexion" placeholder="Mot de passe" type="password">
                         </section>
                         <section class="form-group">
-                            <button name="Connexion" class="btn btn-primary btn-lg btn-block">Se connecter</button>                            
+                            <button name="Connexion" class="btn btn-primary btn-lg btn-block form-connexion">Se connecter</button>                            
                         </section>
                     </form>
                 </section>

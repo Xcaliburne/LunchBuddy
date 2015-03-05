@@ -20,38 +20,40 @@ function ComparerHeures($h1, $h2) {
 /**
  * 
  * @param type $TabDonneeSaisies tableau de données à verifier (peut être $_POST ou $_GET)
- * @param type $aVerifier nom des valeurs à verifier
+ * @param type $aVerifier tableau associatif avec nom des valeurs à verifier pointant sur le nom à afficher
  * @return type true si il n'y a pas d'erreurs, s'il y a des errreurs, retourne le tableau d'erreurs.
  */
 function ValiderSaisie($TabDonneeSaisies, $aVerifier) {
     $erreurs = array();
-    foreach ($aVerifier as $valeur) {
-        if ((isset($TabDonneeSaisies[$valeur])) && (empty($TabDonneeSaisies[$valeur]))) {
-            $erreurs[] = $valeur;
+    foreach ($aVerifier as $key => $value) {
+        if ((isset($TabDonneeSaisies[$key])) && (empty($TabDonneeSaisies[$key]))) {
+            $erreurs[] = $value;
         }
     }
     return $erreurs;
 }
 
-function uploadImg($files) {
-    if (is_array($files)) { //contrôle si un avatar a été sélectionné
+function uploadImg($files, $ancienAvatar) {
+    if (isset($files) && (is_array($files))) { //contrôle si un avatar a été sélectionné
         $uploaddir = realpath('.') . '/upload/';
-        $ancienAvatar = $parametres[0]["avatar"];
         $pathAncienAvatar = './upload/' . $ancienAvatar;
         if ($files['avatar']['name'] != NULL) {
-            unlink($pathAncienAvatar);
+            $test = file_exists($pathAncienAvatar);
+            if (is_file($pathAncienAvatar) == true) {                
+                unlink($pathAncienAvatar);            
+            }
             $ext = pathinfo($files['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
             $filesize = filesize($files['avatar']['tmp_name']);
             $destination_filename = uniqid('_image_', true) . '.' . $ext;
-            if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
+            if ($ext == 'png' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif') {
                 if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
                     $copie = move_uploaded_file($files['avatar']['tmp_name'], $uploaddir . $destination_filename);
                 } else
-                    $avatar = NULL;
-                echo $filesize;
+                    $avatar = NULL;                
             }
         } else
             $destination_filename = $ancienAvatar;
         $avatar = $destination_filename;
+        return $destination_filename;
     }
 }

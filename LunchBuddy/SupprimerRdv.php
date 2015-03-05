@@ -2,7 +2,6 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-require 'personnesdb.php';
 require 'groupesdb.php';
 require './MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {

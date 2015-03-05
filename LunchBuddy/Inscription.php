@@ -60,22 +60,22 @@ and open the template in the editor.
                         <section class="modal-body">
                             <form class="form col-md-12" action="Inscription.php" method="post">
                                 <section class="form-group">
-                                    <input class="form-control input-lg" placeholder="Email" type="text" name="email">
+                                    <input class="form-control input-lg form-connexion" placeholder="Email" type="text" name="email">
                                 </section>
                                 <section class="form-group">
-                                    <input class="form-control input-lg" placeholder="Nom" type="text" name="nom">
+                                    <input class="form-control input-lg form-connexion" placeholder="Nom" type="text" name="nom">
                                 </section>
                                 <section class="form-group">
-                                    <input class="form-control input-lg" placeholder="Prenom" type="text" name="prenom">
+                                    <input class="form-control input-lg form-connexion" placeholder="Prenom" type="text" name="prenom">
                                 </section>
                                 <section class="form-group">
-                                    <input class="form-control input-lg" placeholder="Mot de passe" type="password" name="password">
+                                    <input class="form-control input-lg form-connexion" placeholder="Mot de passe" type="password" name="password">
                                 </section>
                                 <section class="form-group">
-                                    <input class="form-control input-lg" placeholder="Confirmation" type="password" name="confirmation">
+                                    <input class="form-control input-lg form-connexion" placeholder="Confirmation" type="password" name="confirmation">
                                 </section>
                                 <section class="form-group">
-                                    <input class="btn btn-primary btn-lg btn-block" type="submit" name="inscrire" value="S'inscrire">                                    
+                                    <input class="btn btn-primary btn-lg btn-block form-connexion" type="submit" name="inscrire" value="S'inscrire">                                    
                                 </section>
                             </form>
                         </section>

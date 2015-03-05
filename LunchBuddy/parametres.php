@@ -19,7 +19,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     }
     $checkboxes = creerCheckboxes($name, $liste, $checked); //création des checkboxes
     if ($_SERVER["REQUEST_METHOD"] == "POST") { //si la requete est en post
-        $aVerifier = array('nom', 'prenom', 'email', 'adresse', 'numeroRue', 'NPA', 'rayon', 'debutDispo', 'finDispo');        
+        $aVerifier = array('nom' => 'Nom', 'prenom' => 'Prénom', 'email' => 'Email', 'adresse' => 'Adresse', 'numeroRue' => 'N° de rue', 'NPA' => 'NPA', 'rayon' => 'Rayon', 'debutDispo' => 'Début de la disponibilité', 'finDispo' => 'Fin de la disponibilité');
         $valideSaisie = ValiderSaisie($_POST, $aVerifier);
         if (empty($valideSaisie)) {
             if (isset($_POST["jours"])) {
@@ -30,41 +30,18 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             if (is_numeric($_POST["rayon"])) {//si le rayon est  numerique    
                 if (preg_match($regex, $_POST["debutDispo"])) {//si l'heure correspond au format requis   
                     if (preg_match($regex, $_POST["finDispo"])) {//si l'heure correspond au format requis                        
-                        $nom = trim($_POST["nom"]);
-                        $prenom = trim($_POST["prenom"]);
-                        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
                         $debutDispo = $_POST["debutDispo"] . ":00";
                         $finDispo = $_POST["finDispo"] . ":00";
                         if (ComparerHeures($debutDispo, $finDispo)) {
+                            $nom = trim($_POST["nom"]);
+                            $prenom = trim($_POST["prenom"]);
+                            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
                             $adresse = $_POST["adresse"];
                             $numeroRue = $_POST["numeroRue"];
                             $NPA = $_POST["NPA"];
                             $rayon = $_POST["rayon"];
-                            if (isset($_FILES) && is_array($_FILES)) { //contrôle si un avatar a été sélectionné
-                                $uploaddir = realpath('.') . '/upload/';
-                                $ancienAvatar = $parametres[0]["avatar"];
-                                $pathAncienAvatar = './upload/' . $ancienAvatar;
-
-                                if ($_FILES['avatar']['name'] != NULL) {
-                                    if (file_exists($pathAncienAvatar))
-                                        unlink($pathAncienAvatar);
-                                    $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
-                                    $filesize = filesize($_FILES['avatar']['tmp_name']);
-                                    $destination_filename = uniqid('_image_', true) . '.' . $ext;
-
-
-                                    if ($ext == 'png' || $ext == 'jpg' || $ext == 'gif') {
-                                        if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
-                                            $copie = move_uploaded_file($_FILES['avatar']['tmp_name'], $uploaddir . $destination_filename);
-                                        } else {
-                                            $avatar = NULL;
-                                        }
-                                        echo $filesize;
-                                    }
-                                } else {
-                                    $destination_filename = $ancienAvatar;
-                                }
-                                $avatar = $destination_filename;
+                            if (isset($_FILES)) {
+                                $destination_filename = uploadImg($_FILES, $parametres[0]["avatar"]);
                             }
                             if (ModiferParametres($idUtilisateur, $nom, $prenom, $email, $adresse, $numeroRue, $NPA, $rayon, $debutDispo, $finDispo, $destination_filename)) {
                                 if (supprimerJoursDisponibiliteUtilisateur($idUtilisateur)) {
@@ -80,23 +57,24 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                             } else {
                                 $erreurs[] = 'modification interrompue';
                             }
-                        }  else {
-                            $erreurs[] = 'l\'heure de débute est plus grande que l\'heure de fin';
+                        } else {
+                            $erreurs[] = 'l\'heure de début est plus grande que l\'heure de fin';
                         }
                     }
                 }
             }
         } else {
             foreach ($valideSaisie as $wrongValue) {
-                $erreurs[] = $wrongValue . ': doit être saisie';
+                $erreurs[] = $wrongValue . ' : doit être saisie';
             }
         }
         if (empty($erreurs)) {
+            $confirmation = 'modification des informations réussie avec succès !';
             //header('Location: index.php'); //retour à l'accueil
         }
     }
 } else {
-    //header('Location: parametres.php'); //retour à l'accueil
+    header('Location: parametres.php'); //retour à l'accueil
 }
 ?>
 
@@ -127,13 +105,13 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                             <section class="form-group">
                                 <label for="nom" class="control-label">Nom*</label>
                                 <section class="">
-                                    <input type="text"  class="form-control" value="<?php echo $parametres[0]["nom"] ?>" name="nom" id="nom">
+                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["nom"] ?>" name="nom" id="nom">
                                 </section>
                             </section>
                             <section class="form-group">
                                 <label for="prenom" class="control-label">Prenom*</label>
                                 <section class="">
-                                    <input type="text"  class="form-control" value="<?php echo $parametres[0]["prenom"] ?>" name="prenom" id="prenom">
+                                    <input type="text" required class="form-control" value="<?php echo $parametres[0]["prenom"] ?>" name="prenom" id="prenom">
                                 </section>
                             </section>
                             <section class="form-group">
@@ -215,13 +193,21 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     }
                                     ?>
                                 </div>
-                            <?php } ?>
+                            <?php } else { ?>
+                                <div class="pull-left alert alert-success">
+                                    <?php
+                                    ?><span><?php
+                                    echo $confirmation;
+                                    ?></span><?php
+                                    ?>
+                                </div>
+                                <?php } ?>
                             <button class="btn btn-default pull-right">Envoyer</button>
                         </section>
                     </form>                    
                 </article>
             </section>
-            <?php AfficheFooter(); ?>
+<?php AfficheFooter(); ?>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>

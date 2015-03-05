@@ -12,7 +12,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     }
     if (isset($_POST["submit"])) {
         if (!empty($_POST["commentaire"])) {
-            if(!empty($_POST["lat"]) && !empty($_POST["lng"])){
+            if (!empty($_POST["lat"]) && !empty($_POST["lng"])) {
                 $idUtilisateurInvite = $_GET["idUtilisateur"];
                 $idUtilisateur = $_SESSION["idUtilisateur"];
                 $commentaire = $_POST["commentaire"];
@@ -22,22 +22,22 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 $idGroupe = ajoutGroupe($_SESSION["email"]);
                 $statut = 1;
                 $statutInvite = 3;
-            ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
-            ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
+                ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite, TRUE, FALSE);
+                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut, FALSE, TRUE);
                 $date = getdate();
                 $date = $date["year"] . "-" . $date["mon"] . "-" . $date["mday"];
-            $email = $_SESSION["email"];
-            try {
-                $idGroupe = ajoutGroupe($email, TRUE, FALSE);
-                ajouterUtilisateurDansGroupe(150, $idGroupe, $statutInvite);
-                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
-                ajoutRendezvous($idGroupe, $date, $commentaire, FALSE, TRUE);
-            } catch (Exception $ex) {
-                transactionFail();
-                echo $ex;
-            }
-            header('Location: index.php');
-            }else{
+                $email = $_SESSION["email"];
+                try {
+                    $idGroupe = ajoutGroupe($email, TRUE, FALSE);
+                    ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
+                    ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
+                    ajoutRendezvous($idGroupe, $date, $commentaire, $lat, $lng, FALSE, TRUE);
+                } catch (Exception $ex) {
+                    transactionFail();
+                    echo $ex;
+                }
+                header('Location: index.php');
+            } else {
                 $erreur = "Veuillez choisir l'emplacement du rendez-vous en cliquant sur la carte";
             }
         } else {
@@ -61,8 +61,8 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
         <link href="css/source.css" type="text/css" rel="stylesheet">
         <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAn2Y_ZpNP2Zxpn_fXb988YV3FR77qo4sA"></script>
         <script src="./js/googleMap.js" type="text/javascript"></script>  
-        
-        
+
+
 <!-- <script src="js/JQuery.js"></script> -->
 <!-- <script src="js/bootstrap.min.js"></script> -->
     </head>
@@ -81,7 +81,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     <section class="col-md-12">
                                         <textarea name="commentaire" rows="5"></textarea>
                                     </section>
-                                   <section class="col-md-12">                
+                                    <section class="col-md-12">                
                                         <div class="" id="googleMapRdv"></div>                                
                                     </section>
                                 </section>                                 
@@ -96,12 +96,12 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 </article>
             </section>
             <?php AfficheFooter(); ?>
-            
+
             <script>
                 window.onload = initialize("googleMapRdv", null, null);
                 //google.maps.event.addDomListener(window, 'load', initialize);
             </script>
-            
+
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>
