@@ -24,6 +24,10 @@ and open the template in the editor.
     //margin-left: 300px;
 }
 
+#statut{
+    margin-bottom: 10px;
+}
+
 .asideMenu{
     background-color: #000;
     border-radius: 10px;

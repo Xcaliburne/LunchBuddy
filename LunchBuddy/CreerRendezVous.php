@@ -22,15 +22,15 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                 $idGroupe = ajoutGroupe($_SESSION["email"]);
                 $statut = 1;
                 $statutInvite = 3;
-                ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite, TRUE, FALSE);
-                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut, FALSE, TRUE);
+                ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite, 0, TRUE, FALSE);
+                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut, 1, FALSE, TRUE);
                 $date = getdate();
                 $date = $date["year"] . "-" . $date["mon"] . "-" . $date["mday"];
                 $email = $_SESSION["email"];
                 try {
                     $idGroupe = ajoutGroupe($email, TRUE, FALSE);
-                    ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite);
-                    ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut);
+                ajouterUtilisateurDansGroupe($idUtilisateurInvite, $idGroupe, $statutInvite, 0);
+                ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $statut, 1);
                     ajoutRendezvous($idGroupe, $date, $commentaire, $lat, $lng, FALSE, TRUE);
                 } catch (Exception $ex) {
                     transactionFail();
@@ -79,9 +79,12 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                 <section class="form-group">
                                     <label for="commentaire" class="col-md-9 control-label">Entrez les informations du rendez-vous</label>
                                     <section class="col-md-12">
-                                        <textarea name="commentaire" rows="5"></textarea>
+                                        <textarea name="commentaire" rows="5" required></textarea>
                                     </section>
-                                    <section class="col-md-12">                
+                                   <section class="col-md-12">        
+                                       <label class="col-md-10 control-label">Veuillez définir un lieu pour le rendez-vous en cliquant sur la map</label>                             
+                                    </section>
+                                    <section class="col-md-12">     
                                         <div class="" id="googleMapRdv"></div>                                
                                     </section>
                                 </section>                                 

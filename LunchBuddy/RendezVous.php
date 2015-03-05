@@ -48,10 +48,11 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
             <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
             <section class="col-md-12"> 
-                <h1 class="text-center">Rendez-vous</h1>
+                <h1 class="text-center">Mes Rendez-vous</h1>
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>date</th>
                             <th>Informations</th>
                             <th>Mon Statut</th>
@@ -62,12 +63,26 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                         </tr>
                     </thead>
                     <tbody>
+                        
                         <?php
                         foreach ($rdvs as $rendezvous) {
+                            if($rendezvous["Envoye"] == 0){
+                                $url="entrant";
+                            }else{
+                                $url="sortant";
+                            }
+                            $strDate = $rendezvous["dateRdv"];
+                            $date = strtotime($strDate);
+                            $dateFormat = date('d-m-Y', $date);
+                            
+                            
                             echo ''
                             . '<tr>'
                             . '<td>'
-                            . $rendezvous["dateRdv"]
+                            . '<img src="./img/'.$url.'.jpg" alt="'.$url.'" style="width:30px; height:30px;" />'
+                            . '</td>'
+                            . '<td>'
+                            . $dateFormat
                             . '</td>'
                             . '<td>'
                             . $rendezvous["commentaire"]

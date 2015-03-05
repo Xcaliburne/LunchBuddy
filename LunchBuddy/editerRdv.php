@@ -80,17 +80,18 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                         <!--<form class="form-horizontal" method="post" action="editerRdv.php?idRdv=2&amp;idGroupe=1">-->
                         <section class="col-md-6 col-md-offset-3">
                                 <section class="form-group">
-                                    <label for="commentaire" class="col-md-8 control-label">Entrez les informations du rendez-vous</label>
+                                    <label for="commentaire" class="col-md-8 control-label">Vous pouvez changer les informations du rendez-vous</label>
                                     <section class="col-md-12">
-                                        <div><textarea name="commentaire" rows="5"><?php echo $infosRdv["commentaire"] ?></textarea></div>
                                         <div>
-                                            <label for="statut">Statut : </label>
+                                            <h4><label for="statut">Statut : </label></h4>
                                             <?php
                                             foreach ($selects as $select) {
                                                 echo $select;
                                             }
                                             ?>
                                         </div>
+                                        <div><textarea name="commentaire" rows="5" required><?php echo $infosRdv["commentaire"] ?></textarea></div>
+                                        
                                     </section>
                                     <section class="col-md-12">                
                                         <div class="" id="googleMapRdv"></div>                                

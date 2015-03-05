@@ -31,7 +31,8 @@ require 'MenusHTML.php';
         <section class="col-md-12 conteneur">
             <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
-            <section class="col-md-12">                
+            <section class="col-md-12">    
+                <h1>Voici les personnes disponibles aujourd'hui :</h1>
                 <div class="" id="googleMap"></div>                                
             </section>
         </section>

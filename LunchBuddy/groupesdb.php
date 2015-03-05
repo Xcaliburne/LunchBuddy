@@ -40,7 +40,7 @@ function lireRendezVousUtilisateur($idUtilisateur, $startTransaction = FALSE, $s
     if ($startTransaction) {
         $bdd->beginTransaction();
     }
-    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut, r.lat, r.lng FROM rendezvous as r
+    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut, r.lat, r.lng, c.Envoye FROM rendezvous as r
     join groupes as g on r.idGroupe = g.idGroupe
     join composer as c on c.idGroupe = g.idGroupe
     join statuts as s on c.idStatut = s.idStatut
@@ -89,14 +89,14 @@ function lireStatutParGroupeetUtilisateur($idGroupe, $idUtilisateur, $startTrans
     return $requete->fetch();
 }
 
-function ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $idStatut, $startTransaction = FALSE, $stopTransaction = FALSE) {
+function ajouterUtilisateurDansGroupe($idUtilisateur, $idGroupe, $idStatut, $Envoye,  $startTransaction = FALSE, $stopTransaction = FALSE) {
     $bdd = connexionDb();
     if ($startTransaction){
         $bdd->beginTransaction();
     }
-    $sql = 'INSERT INTO `composer`(`idUtilisateur`, `idGroupe`, `idStatut`) VALUES (:idUtilisateur, :idGroupe, :idStatut)';
+    $sql = 'INSERT INTO `composer`(`idUtilisateur`, `idGroupe`, `idStatut`, `Envoye`) VALUES (:idUtilisateur, :idGroupe, :idStatut, :Envoye)';
     $requete = $bdd->prepare($sql);
-    $requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe, 'idStatut' => $idStatut));
+    $requete->execute(array('idUtilisateur' => $idUtilisateur, 'idGroupe' => $idGroupe, 'idStatut' => $idStatut, 'Envoye' => $Envoye));
     if ($stopTransaction){
         $bdd->commit();
     }

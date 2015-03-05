@@ -164,7 +164,7 @@ function ajoutMarqueur(map, lat, lng, personne, rayon)
                                 "+ img +"\n\
                                 <div>" + personne.nom + ' ' + personne.prenom + "</div>\n\
                                 <div>\n\
-                                    <div><span>Disponibilité : "+ personne.debutPause + " à " + personne.finPause +"</span></div>\n\
+                                    <div><span><strong>Disponibilité : "+ personne.debutPause + " à " + personne.finPause +"</strong></span></div>\n\
                                     <div><input type=\"submit\" name=\"ajouter\" value=\"demande de rendez-vous\"/></div>\n\
                                 </div>\n\
                             </div>\n\
