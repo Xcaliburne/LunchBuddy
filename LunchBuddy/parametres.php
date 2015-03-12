@@ -193,7 +193,8 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                     }
                                     ?>
                                 </div>
-                            <?php } else {
+                                <?php
+                            } else {
                                 if (!empty($confirmation)) {
                                     ?>
                                     <div class="pull-left alert alert-success">
@@ -202,7 +203,8 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                                             echo $confirmation;
                                             ?></span><?php ?>
                                     </div>
-                                <?php }
+                                    <?php
+                                }
                             }
                             ?>
                             <button class="btn btn-default pull-right">Envoyer</button>
@@ -210,7 +212,7 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                     </form>                    
                 </article>
             </section>
-<?php AfficheFooter(); ?>
+            <?php AfficheFooter(); ?>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         </section>
