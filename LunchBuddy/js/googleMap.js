@@ -38,8 +38,11 @@ function initialize(map_name,listePersonnes, listeRdv)
             placeMarker(event.latLng);
         });
     }
-    if(map_name=="googleMap")
+    if(map_name=="googleMap"){
         extraitMarqueur(map, listePersonnes);
+        
+        
+    }
 }
 // 
 function ajaxLoad(utilisateur)
@@ -57,6 +60,25 @@ function ajaxLoad(utilisateur)
            alert(error);
        }
    });
+    
+    $.ajax({
+       url : 'ajaxLireRendezvousUtilisateur.php',
+       type : 'GET',
+       dataType : 'html',
+       data: "idUtilisateur=" + utilisateur,
+       success : function(resultat, statut, error){ // success est toujours en place, bien sûr !
+           console.log(JSON.parse(resultat));
+           ajoutMarqueurRdvUtilisateur(map, JSON.parse(resultat));
+       },
+
+       error : function(resultat, statut, error){
+           alert(error);
+       }
+   });
+    
+    
+   
+    
  }
  
  function ajaxLoadRdv(rdv, utilisateur)
@@ -80,7 +102,6 @@ function ajaxLoad(utilisateur)
  }
  
 
-   
 
 function extraitMarqueur(map, listePersonne)
 {
@@ -126,6 +147,37 @@ function successCallback(position){
     position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 
     map: map
   }); 
+}
+
+function ajoutMarqueurRdvUtilisateur(map, rdv)
+{
+    var i;
+    for (i=0;i<rdv.length;i++){
+        var lat = rdv[i].lat;
+        var lng = rdv[i].lng;
+        
+        
+//        var contentString = "Vous avez rendez-vous avec ";
+//  
+//      infowindows.push({"infoId" : personne.idUtilisateur, "infowindow": new google.maps.InfoWindow({
+//            content: contentString
+//        })});
+        
+        
+        var coord = new google.maps.LatLng(lat, lng);
+        var marker=  new google.maps.Marker({
+            map: map,
+            position: coord
+        });
+        
+        
+    }
+    
+     
+   
+            
+
+    
 }
 
 function ajoutMarqueurRdv(rdv)

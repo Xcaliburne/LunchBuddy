@@ -6,6 +6,7 @@ require './personnesdb.php';
 $jour = date('N');
 $idUtilisateur =$_REQUEST["idUtilisateur"];
 
+
 $result = lirePersonneDisponible($jour,$idUtilisateur);
 /*echo "<pre>";
 var_dump($result);
