@@ -6,7 +6,12 @@ require 'groupesdb.php';
 require 'MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
-    $rdvs = lireRendezVousUtilisateur($idUtilisateur);
+    if (isset($_GET["statut"]) and $_GET["statut"] = "EnAttente") {
+        echo 'test';
+        $rdvs = lireRendezVousUtilisateur($idUtilisateur, $_GET["statut"]);
+    } else {
+        $rdvs = lireRendezVousUtilisateur($idUtilisateur);
+    }
     foreach ($rdvs as &$rdv) {
         $idGroupe = $rdv["idGroupe"];
         $personnes = lirePersonnesRdv($idGroupe);
@@ -25,6 +30,9 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
 } else {
     header('Location: index.php'); //retour à l'accueil
 }
+//echo '<pre>';
+//echo var_dump($rdvs);
+//echo '</pre>';
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,23 +71,23 @@ if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                         <?php
                         foreach ($rdvs as $rendezvous) {
-                            if($rendezvous["Envoye"] == 0){
-                                $url="entrant";
-                            }else{
-                                $url="sortant";
+                            if ($rendezvous["Envoye"] == 0) {
+                                $url = "entrant";
+                            } else {
+                                $url = "sortant";
                             }
                             $strDate = $rendezvous["dateRdv"];
                             $date = strtotime($strDate);
                             $dateFormat = date('d-m-Y', $date);
-                            
-                            
+
+
                             echo ''
                             . '<tr>'
                             . '<td>'
-                            . '<img src="./img/'.$url.'.jpg" alt="'.$url.'" style="width:30px; height:30px;" />'
+                            . '<img src="./img/' . $url . '.jpg" alt="' . $url . '" style="width:30px; height:30px;" />'
                             . '</td>'
                             . '<td>'
                             . $dateFormat

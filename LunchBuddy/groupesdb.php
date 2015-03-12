@@ -35,7 +35,7 @@ function lireGroupeParidRdv($id, $startTransaction = FALSE, $stopTransaction = F
     return $requete->fetchAll();
 }
 
-function lireRendezVousUtilisateur($idUtilisateur, $startTransaction = FALSE, $stopTransaction = FALSE) {
+function lireRendezVousUtilisateur($idUtilisateur,$filtre = null, $startTransaction = FALSE, $stopTransaction = FALSE) {
     $bdd = connexionDb();
     if ($startTransaction) {
         $bdd->beginTransaction();
@@ -45,6 +45,17 @@ function lireRendezVousUtilisateur($idUtilisateur, $startTransaction = FALSE, $s
     join composer as c on c.idGroupe = g.idGroupe
     join statuts as s on c.idStatut = s.idStatut
     where c.idUtilisateur = :idUtilisateur';
+    switch ($filtre) {
+        case 'EnAttente':
+            $sql .= ' and s.NomStatut = \'En attente\'';
+            break;
+        case 'Accepte':
+            $sql .= ' and s.NomStatut = \'Accepté\'';
+            break;
+        case 'refuse':
+            $sql .= ' and s.NomStatut = \'Refusé\'';
+    }
+    $sql .= ' order by r.dateRdv desc';
     $requete = $bdd->prepare($sql);
     $requete->execute(array('idUtilisateur' => $idUtilisateur));
     if ($stopTransaction) {

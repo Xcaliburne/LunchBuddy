@@ -2,10 +2,9 @@
 if (!isset($_SESSION)){
     session_start();
 }
-if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))){
+if ((empty($_SESSION["idUtilisateur"])) || (empty($_SESSION["email"]))) {
     require 'Connexion.php';
-}  else {
-    
+}  else {    
     require 'Accueil.php';
 
 }

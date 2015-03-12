@@ -1,6 +1,13 @@
 <?php
-require 'personnesdb.php';
+require 'groupesdb.php';
 require 'MenusHTML.php';
+$AfficheNotif = TRUE;
+echo $_SESSION["idUtilisateur"];
+$rdvsEnAttente = lireRendezVousUtilisateur($_SESSION["idUtilisateur"], 'EnAttente');
+if (empty($rdvsEnAttente)) {
+    $AfficheNotif = FALSE;
+}
+unset($rdvsEnAttente);
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,7 +26,7 @@ require 'MenusHTML.php';
         <script src="./js/googleMap.js" type="text/javascript"></script>
 
         <script>
-            $( document ).ready(function() {
+            $(document).ready(function () {
                 ajaxLoad(document.getElementById("idUtilisateur").value);
             });
             //google.maps.event.addDomListener(window, 'load', initialize);
@@ -32,8 +39,16 @@ require 'MenusHTML.php';
             <?php AfficheHeader(); ?>
             <!-- Fixed navbar -->
             <section class="col-md-12">    
-                <h1>Voici les personnes disponibles aujourd'hui :</h1>
-                <div class="" id="googleMap"></div>                                
+                <h1 class="col-md-8 T_Accueil">Voici les personnes disponibles aujourd'hui :</h1>               
+                <?php if ($AfficheNotif == true) { ?>
+                    <div class = "col-md-4  AlerteInfo alert alert-info alert-dismissable">
+                        <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true">
+                            &times;
+                        </button>
+                        <a href = "RendezVous.php?statut=EnAttente" class = "alert-link">Vous avez des demandes en attente</a>
+                    </div>
+                <?php } ?>
+                <div class="col-md-12" id="googleMap"></div>                                
             </section>
         </section>
         <?php AfficheFooter(); ?>
