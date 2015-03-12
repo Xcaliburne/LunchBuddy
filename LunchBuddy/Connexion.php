@@ -2,7 +2,7 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
+if ((empty($_SESSION["idUtilisateur"])) && (empty($_SESSION["email"]))) {
     $erreur = "";
     if (isset($_REQUEST['Connexion'])) {
         if ((!empty($_REQUEST['Email'])) && (!empty($_REQUEST['Password']))) {

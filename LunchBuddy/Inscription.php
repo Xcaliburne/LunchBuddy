@@ -4,7 +4,7 @@ if (!isset($_SESSION)) {
 }
 require './personnesdb.php';
 $erreur = "";
-if ((empty($_SESSION["idPersonne"])) && (empty($_SESSION["email"]))) {
+if ((empty($_SESSION["idUtilisateur"])) && (empty($_SESSION["email"]))) {
     if ((!empty($_POST["email"])) && (!empty($_POST["nom"])) && (!empty($_POST["prenom"])) && (!empty($_POST["password"])) && (!empty($_POST["confirmation"]))) {
         $email = $_POST["email"];
         $password = sha1($_POST["password"]);
