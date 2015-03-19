@@ -8,6 +8,7 @@ var latUser;
 var lngUser;
 var markerRdv;
 var markerExist;
+var geocoder;
 navigator.geolocation.getCurrentPosition(function(position) {
    latUser = position.coords.latitude;
    lngUser =position.coords.longitude;
@@ -121,11 +122,13 @@ function extraitMarqueur(map, listePersonne)
 
 function extraitMarqueurRdv(map, rdv)
 {
+    
     var i = 0;
     for(i=0;i<rdv.length;i++)
     {
         var lat = rdv[i].lat;
         var lng = rdv[i].lng;
+        
         ajoutMarqueurRdvUtilisateur(map, lat, lng, rdv[i]);
         
     }
@@ -165,12 +168,25 @@ function successCallback(position){
 var infowindows = new Array();
 function ajoutMarqueurRdvUtilisateur(map, lat, lng, rdv)
 {
+    
     var img;
+    var adresse;
     var statut;
     var image = {
             url: 'img/rdv.png',
             scaledSize : new google.maps.Size(30, 36)
         };  
+        var latlng = new google.maps.LatLng(lat, lng);
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'latlng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (results[1]) {
+                adresse = results[1].formatted_address;
+              }
+            } else {
+              alert("Geocoder failed due to: " + status);
+            }
+          });    
         
         
         if(rdv.avatar == null)
@@ -188,7 +204,7 @@ function ajoutMarqueurRdvUtilisateur(map, lat, lng, rdv)
         }
         
         var contentString = "<div>\n\
-                                <div><h2>Vous avez rendez-vous avec :</h2>\n\
+                                <div><h3>Vous avez rendez-vous avec :</h3>\n\
                                  <table>\n\
                                     <tr width='50px'>\n\
                                         <td width='30px rowspan='2'>" + img +"</td>\n\
@@ -204,6 +220,7 @@ function ajoutMarqueurRdvUtilisateur(map, lat, lng, rdv)
                                     <div><strong>Infos du rendez-vous :</strong></div>\n\
                                     <div><strong>Date : </strong>"+ rdv.dateRdv +"</div>\n\
                                     <div><strong>Statut : </strong>" + rdv.nomStatut + "</div>\n\
+                                    <div><strong>Adresse : </strong>" + adresse + "</div>\n\
                                     <div><strong>Commentaire : </strong></div>\n\
                                     <div>" + rdv.commentaire +"</div>\n\
                                 </div>\n\
