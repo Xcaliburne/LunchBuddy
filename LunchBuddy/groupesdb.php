@@ -40,11 +40,16 @@ function lireRendezVousUtilisateur($idUtilisateur,$filtre = null, $startTransact
     if ($startTransaction) {
         $bdd->beginTransaction();
     }
-    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut, r.lat, r.lng, c.Envoye FROM rendezvous as r
+    $sql = 'SELECT r.idRdv, r.dateRdv, r.commentaire, r.idGroupe, s.nomStatut, r.lat, r.lng, c1.Envoye, u2.nom, u2.prenom, u2.avatar FROM rendezvous as r
     join groupes as g on r.idGroupe = g.idGroupe
-    join composer as c on c.idGroupe = g.idGroupe
-    join statuts as s on c.idStatut = s.idStatut
-    where c.idUtilisateur = :idUtilisateur';
+    join composer as c1 on c1.idGroupe = g.idGroupe
+    join statuts as s on c1.idStatut = s.idStatut
+    join utilisateurs as u1 ON u1.idUtilisateur = c1.idUtilisateur 
+    join composer as c2 on c2.idGroupe = g.idGroupe
+    join utilisateurs as u2 ON u2.idUtilisateur = c2.idUtilisateur
+    where u1.idUtilisateur = :idUtilisateur
+    AND u2.idUtilisateur <> u1.idUtilisateur
+    AND DATE(r.dateRdv) >= DATE(NOW())';
     switch ($filtre) {
         case 'EnAttente':
             $sql .= ' and s.NomStatut = \'En attente\'';
@@ -61,7 +66,7 @@ function lireRendezVousUtilisateur($idUtilisateur,$filtre = null, $startTransact
     if ($stopTransaction) {
         $bdd->commit();
     }
-    return $requete->fetchAll();
+    return $requete->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function lireRendezVous($idRdv, $idUtilisateur, $startTransaction = FALSE, $stopTransaction = FALSE) {

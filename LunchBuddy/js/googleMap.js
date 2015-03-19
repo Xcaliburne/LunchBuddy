@@ -68,7 +68,7 @@ function ajaxLoad(utilisateur)
        data: "idUtilisateur=" + utilisateur,
        success : function(resultat, statut, error){ // success est toujours en place, bien sûr !
            console.log(JSON.parse(resultat));
-           ajoutMarqueurRdvUtilisateur(map, JSON.parse(resultat));
+           extraitMarqueurRdv(map, JSON.parse(resultat));
        },
 
        error : function(resultat, statut, error){
@@ -119,6 +119,18 @@ function extraitMarqueur(map, listePersonne)
     }
 } 
 
+function extraitMarqueurRdv(map, rdv)
+{
+    var i = 0;
+    for(i=0;i<rdv.length;i++)
+    {
+        var lat = rdv[i].lat;
+        var lng = rdv[i].lng;
+        ajoutMarqueurRdvUtilisateur(map, lat, lng, rdv[i]);
+        
+    }
+} 
+
 
 
 function placeMarker(location) {
@@ -149,36 +161,87 @@ function successCallback(position){
   }); 
 }
 
-function ajoutMarqueurRdvUtilisateur(map, rdv)
+
+var infowindows = new Array();
+function ajoutMarqueurRdvUtilisateur(map, lat, lng, rdv)
 {
-    var i;
-    for (i=0;i<rdv.length;i++){
-        var lat = rdv[i].lat;
-        var lng = rdv[i].lng;
+    var img;
+    var statut;
+    var image = {
+            url: 'img/rdv.png',
+            scaledSize : new google.maps.Size(30, 36)
+        };  
         
         
-//        var contentString = "Vous avez rendez-vous avec ";
-//  
-//      infowindows.push({"infoId" : personne.idUtilisateur, "infowindow": new google.maps.InfoWindow({
-//            content: contentString
-//        })});
+        if(rdv.avatar == null)
+        {
+          img = "";
+        }else{
+          img = "<div><img src=\"./upload/" + rdv.avatar + "\" height=\"50\" width=\"50\"/></div>";
+        }
+        
+        if(rdv.nomStatut == 'En attente')
+        {
+           statut = "<a href='editerRdv.php?idRdv="+ rdv.idRdv + "&idGroupe=" + rdv.idGroupe +"'>Modifier</a>"; 
+        }else{
+            statut = "";
+        }
+        
+        var contentString = "<div>\n\
+                                <div><h2>Vous avez rendez-vous avec :</h2>\n\
+                                 <table>\n\
+                                    <tr width='50px'>\n\
+                                        <td width='30px rowspan='2'>" + img +"</td>\n\
+                                        <td width='20px'>"+ rdv.nom + ' ' + rdv.prenom +"</td>\n\
+                                    </tr>\n\
+                                    <tr width='50px'>\n\
+                                        <td></td>\n\
+                                        <td width='20px'></td>\n\
+                                    </tr>\n\
+                                  </table>\n\
+                                </div>\n\
+                                <div>\n\
+                                    <div><strong>Infos du rendez-vous :</strong></div>\n\
+                                    <div><strong>Date : </strong>"+ rdv.dateRdv +"</div>\n\
+                                    <div><strong>Statut : </strong>" + rdv.nomStatut + "</div>\n\
+                                    <div><strong>Commentaire : </strong></div>\n\
+                                    <div>" + rdv.commentaire +"</div>\n\
+                                </div>\n\
+                                "+ statut +"\n\
+                            </div>";
+  
+        infowindows.push({"infoId" : rdv.idRdv ,"infowindow": new google.maps.InfoWindow({
+            content: contentString
+        })});
+    
+        
         
         
         var coord = new google.maps.LatLng(lat, lng);
         var marker=  new google.maps.Marker({
             map: map,
+            icon: image,
             position: coord
         });
-        
-        
-    }
-    
-     
-   
-            
 
+        google.maps.event.addListener(marker, 'click', function() {
+        $.each(infowindows, function(index, value) {
+            if(value["infoId"] == rdv.idRdv) {
+                value["infowindow"].open(map,marker);
+            } else {
+                  value["infowindow"].close();
+            }
+         });
+//        infowindows[0].open(map,marker);
+    }); 
+       
+        
     
+    
+    
+      
 }
+      
 
 function ajoutMarqueurRdv(rdv)
 {
@@ -201,7 +264,7 @@ function ajoutMarqueurRdv(rdv)
     markerExist = true;
 }
 
-var infowindows = new Array();
+var infowindows2 = new Array();
 function ajoutMarqueur(map, lat, lng, personne, rayon)
 {
       var img;
@@ -222,19 +285,13 @@ function ajoutMarqueur(map, lat, lng, personne, rayon)
                             </div>\n\
                             </form>";
   
-      infowindows.push({"infoId" : personne.idUtilisateur, "infowindow": new google.maps.InfoWindow({
+      infowindows2.push({"infoId" : personne.idUtilisateur, "infowindow": new google.maps.InfoWindow({
             content: contentString
         })});
      
       var image = {
         url: 'img/user.png',
         scaledSize : new google.maps.Size(30, 36)
-            // This marker is 20 pixels wide by 32 pixels tall.
-        //size: new google.maps.Size(50, 62),
-        // The origin for this image is 0,0.
-        //origin: new google.maps.Point(0,0),
-        // The anchor for this image is the base of the flagpole at 0,32.
-       // anchor: new google.maps.Point(0, 0)
       };
      var coord = new google.maps.LatLng(lat, lng);
      var optionsMarker = {
@@ -249,7 +306,7 @@ function ajoutMarqueur(map, lat, lng, personne, rayon)
             
 
     google.maps.event.addListener(marker, 'click', function() {
-        $.each(infowindows, function(index, value) {
+        $.each(infowindows2, function(index, value) {
             if(value["infoId"] == personne.idUtilisateur) {
                 value["infowindow"].open(map,marker);
             } else {
