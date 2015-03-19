@@ -39,8 +39,8 @@ function uploadImg($files, $ancienAvatar) {
         $pathAncienAvatar = './upload/' . $ancienAvatar;
         if ($files['avatar']['name'] != NULL) {
             $test = file_exists($pathAncienAvatar);
-            if (is_file($pathAncienAvatar) == true) {                
-                unlink($pathAncienAvatar);            
+            if (is_file($pathAncienAvatar) == true) {
+                unlink($pathAncienAvatar);
             }
             $ext = pathinfo($files['avatar']['name'], PATHINFO_EXTENSION); //récupère l'extension du fichier
             $filesize = filesize($files['avatar']['tmp_name']);
@@ -49,11 +49,31 @@ function uploadImg($files, $ancienAvatar) {
                 if ($filesize < 1024 * 1024 * 1024 * 0.2) {//taille du fichier plus petit de 2MB admis
                     $copie = move_uploaded_file($files['avatar']['tmp_name'], $uploaddir . $destination_filename);
                 } else
-                    $avatar = NULL;                
+                    $avatar = NULL;
             }
         } else
             $destination_filename = $ancienAvatar;
         $avatar = $destination_filename;
         return $destination_filename;
     }
+}
+
+function Notif() {   
+    $rdvsEnAttente = lireRendezVousUtilisateur($_SESSION["idUtilisateur"], 'EnAttente');
+    if (!empty($rdvsEnAttente)) {
+        unset($rdvsEnAttente);
+        $notif = NotifEnAttente();
+        return $notif;
+    }
+    return '';
+}
+
+function NotifEnAttente() {
+    return $Notif = ''
+            . '<div class = "col-md-4  AlerteInfo alert alert-info alert-dismissable">'
+            . '<button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true">'
+            . '&times;'
+            . '</button>'
+            . '<a href = "RendezVous.php?statut=EnAttente" class = "alert-link">Vous avez des demandes en attente</a>'
+            . '</div>';
 }

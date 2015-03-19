@@ -6,8 +6,8 @@ require 'groupesdb.php';
 require 'MenusHTML.php';
 if ((!empty($_SESSION["idUtilisateur"])) && (!empty($_SESSION["email"]))) {
     $idUtilisateur = $_SESSION["idUtilisateur"];
-    if (isset($_GET["statut"]) and $_GET["statut"] = "EnAttente") {
-        echo 'test';
+    if (isset($_GET['statut']) && $_GET['statut'] == "EnAttente" || $_GET['statut'] == 'Accepte') {
+        echo $_GET['statut'];
         $rdvs = lireRendezVousUtilisateur($idUtilisateur, $_GET["statut"]);
     } else {
         $rdvs = lireRendezVousUtilisateur($idUtilisateur);

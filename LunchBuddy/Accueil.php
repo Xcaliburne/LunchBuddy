@@ -1,13 +1,8 @@
 <?php
 require 'groupesdb.php';
 require 'MenusHTML.php';
-$AfficheNotif = TRUE;
-echo $_SESSION["idUtilisateur"];
-$rdvsEnAttente = lireRendezVousUtilisateur($_SESSION["idUtilisateur"], 'EnAttente');
-if (empty($rdvsEnAttente)) {
-    $AfficheNotif = FALSE;
-}
-unset($rdvsEnAttente);
+require 'Fonctions.php';
+$Notifs = Notif();
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,14 +35,7 @@ unset($rdvsEnAttente);
             <!-- Fixed navbar -->
             <section class="col-md-12">    
                 <h1 class="col-md-8 T_Accueil">Voici les personnes disponibles aujourd'hui :</h1>               
-                <?php if ($AfficheNotif == true) { ?>
-                    <div class = "col-md-4  AlerteInfo alert alert-info alert-dismissable">
-                        <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true">
-                            &times;
-                        </button>
-                        <a href = "RendezVous.php?statut=EnAttente" class = "alert-link">Vous avez des demandes en attente</a>
-                    </div>
-                <?php } ?>
+                <?php echo $Notifs; ?>                                 
                 <div class="col-md-12" id="googleMap"></div>                                
             </section>
         </section>
